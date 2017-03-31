@@ -11,7 +11,6 @@ import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
 
 /**
- * Chapter 1
  * 你的第一个jME3程序
  * @author yanmaoyuan
  */
