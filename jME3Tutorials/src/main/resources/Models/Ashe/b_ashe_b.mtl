@@ -1,0 +1,8 @@
+newmtl ashe_base_2011_MD_lambert2SG1_SG
+illum 4
+Kd 1.00 1.00 1.00
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+map_Kd b_ash.tga
+Ni 1.00
+Ks 0.50 0.50 0.50

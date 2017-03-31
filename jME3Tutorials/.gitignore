@@ -1,0 +1,5 @@
+/.gradle/
+/bin
+/.settings
+*.dll
+*.so

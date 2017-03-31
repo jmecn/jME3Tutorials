@@ -1,0 +1,44 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+repositories {
+    jcenter()
+}
+
+// 定义jME3的组织与版本号。更新jME3依赖时，直接修改版本号即可。
+def jme3 = [g:'org.jmonkeyengine', v:'3.1.0-stable']
+
+dependencies {
+    // 将libs文件夹下所有jar文件添加到classpath
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Logger组件
+    compile 'org.slf4j:slf4j-api:1.7.21'
+    
+    /**
+     * jMonkeyEngine3
+     */
+    // jME3桌面开发核心组件
+    compile "$jme3.g:jme3-core:$jme3.v"
+    compile "$jme3.g:jme3-desktop:$jme3.v"
+    compile "$jme3.g:jme3-lwjgl:$jme3.v"
+    // 水面、粒子特效等
+    compile "$jme3.g:jme3-effects:$jme3.v"
+
+    /**
+     * Lemur用于制作jME3的GUI
+     */
+    compile "com.simsilica:lemur:1.10.1"
+    compile "com.simsilica:lemur-proto:1.9.1"
+    // Lemur支持使用 groovy脚本编写的样式文件，(可选)。
+    compile 'org.codehaus.groovy:groovy-all:2.4.10'
+    
+    /**
+     * JUnit单元测试
+     */
+    testCompile 'junit:junit:4.12'
+}
