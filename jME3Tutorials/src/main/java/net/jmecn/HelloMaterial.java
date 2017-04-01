@@ -27,12 +27,12 @@ public class HelloMaterial extends SimpleApplication {
         mat.getAdditionalRenderState().setWireframe(true);
         mat.setColor("Color", ColorRGBA.Red);// 把球体变成红色
         
-        // #3 创造1个地板和1个球体
+        // #3 创造1个球体
         Geometry sphere = new Geometry("球体");
         sphere.setMesh(mesh);
         sphere.setMaterial(mat);
 
-        // #4 将地板和球体都添加到场景中
+        // #4 将球体添加到场景中
         rootNode.attachChild(sphere);
         
     }
