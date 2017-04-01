@@ -1,5 +1,7 @@
 /.gradle/
-/bin
+/bin/
+/build/
+/logs/
 /.settings
 *.dll
 *.so
