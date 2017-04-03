@@ -4,11 +4,14 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
+import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.Texture;
 
@@ -40,6 +43,8 @@ public class HelloMaterial extends SimpleApplication {
         
         addUnshadedSphere();
         addLightingSphere();
+        
+        addTransparentQuad();
         
         // 添加光源
         addLight();
@@ -144,6 +149,30 @@ public class HelloMaterial extends SimpleApplication {
         geom.setMaterial(mat);
         
         rootNode.attachChild(geom);
+    }
+    
+    /**
+     * 添加一个半透明纹理
+     */
+    private void addTransparentQuad() {
+        // 加载无光材质。
+        Material mat = new Material(assetManager,
+                "Common/MatDefs/Misc/Unshaded.j3md");
+        // 加载一个带透明度通道的纹理
+        mat.setTexture("ColorMap",
+                assetManager.loadTexture("Textures/ColoredTex/Monkey.png"));
+        
+        Geometry geom = new Geometry("透明纹理", new Quad(4, 4));
+        geom.setMaterial(mat);
+        
+        geom.move(0, 0, 4);
+        rootNode.attachChild(geom);
+        
+        // 将材质的混色模式设置为：BlendMode.Alpha
+        mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);// 重要!
+        // 将Geometry的渲染序列设置为Transparent，这将使它在其他不透明物体绘制后再绘制。
+        geom.setQueueBucket(Bucket.Transparent);                     // 重要!
+        
     }
     
     /**

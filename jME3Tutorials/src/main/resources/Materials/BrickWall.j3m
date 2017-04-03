@@ -1,0 +1,12 @@
+Material brick wall : Common/MatDefs/Light/Lighting.j3md {
+    MaterialParameters {
+        DiffuseMap : Textures/Terrain/BrickWall/BrickWall.jpg
+        NormalMap  : Textures/Terrain/BrickWall/BrickWall_normal.jpg
+        ParallaxMap: Textures/Terrain/BrickWall/BrickWall_normal.jpg
+        UseMaterialColors : true
+        Ambient  : 0.0 0.0 0.0 1.0
+        Diffuse  : 1.0 1.0 1.0 1.0
+        Specular : 0.0 0.0 0.0 1.0
+        Shininess: 2.0
+    }
+}
