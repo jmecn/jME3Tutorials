@@ -1,4 +1,4 @@
-package net.jmecn;
+package net.jmecn.material;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.light.DirectionalLight;
@@ -12,7 +12,7 @@ import com.jme3.scene.shape.Quad;
  * @author yanmaoyuan
  *
  */
-public class HelloJ3M extends SimpleApplication {
+public class TestJ3M extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
@@ -31,7 +31,7 @@ public class HelloJ3M extends SimpleApplication {
     }
     
     public static void main(String[] args) {
-        HelloJ3M app = new HelloJ3M();
+        TestJ3M app = new TestJ3M();
         app.start();
     }
 
