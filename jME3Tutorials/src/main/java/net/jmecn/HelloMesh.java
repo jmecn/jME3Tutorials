@@ -9,6 +9,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.scene.debug.Arrow;
+import com.jme3.texture.Texture;
 import com.jme3.util.BufferUtils;
 
 /**
@@ -33,6 +34,8 @@ public class HelloMesh extends SimpleApplication {
         createArrow(new Vector3f(5, 0, 0), ColorRGBA.Green);
         createArrow(new Vector3f(0, 5, 0), ColorRGBA.Red);
         createArrow(new Vector3f(0, 0, 5), ColorRGBA.Blue);
+        
+        viewPort.setBackgroundColor(ColorRGBA.LightGray);
     }
 
     /**
@@ -42,13 +45,23 @@ public class HelloMesh extends SimpleApplication {
         // 六个顶点
         float[] vertex = {
                 2.5f, 4f, 0f, // 零
-                1f, 3.26f, 0f, // 壹
-                1f, 1.74f, 0f, // 贰
+                1f, 3.26f, 0f,// 壹
+                1f, 1.74f, 0f,// 贰
                 2.5f, 1f, 0f, // 叁
-                4f, 1.74f, 0f, // 肆
-                4f, 3.26f, 0f// 伍
+                4f, 1.74f, 0f,// 肆
+                4f, 3.26f, 0f // 伍
         };
 
+        // 纹理坐标
+        float[] texCoords = new float[] {
+               0.5f, 0.75f,  // 零
+               0.25f, 0.625f,// 壹
+               0.25f, 0.375f,// 贰
+               0.5f, 0.25f,  // 叁
+               0.75f, 0.375f,// 肆
+               0.75f, 0.625f // 伍
+        };
+        
         // 四个三角形
         int[] indices = new int[] {
                 0, 1, 2, // 三角形0
@@ -61,6 +74,7 @@ public class HelloMesh extends SimpleApplication {
         Mesh mesh = new Mesh();
         // 保存顶点位置和顶点索引
         mesh.setBuffer(Type.Position, 3, BufferUtils.createFloatBuffer(vertex));
+        mesh.setBuffer(Type.TexCoord, 2, BufferUtils.createFloatBuffer(texCoords));
         mesh.setBuffer(Type.Index, 1, BufferUtils.createIntBuffer(indices));
 
         mesh.updateBound();
@@ -70,6 +84,10 @@ public class HelloMesh extends SimpleApplication {
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         // mat.getAdditionalRenderState().setWireframe(true);
 
+        // 设置纹理贴图
+        Texture tex = assetManager.loadTexture("Models/Hexagon/hex.png");
+        mat.setTexture("ColorMap", tex);
+        
         // 使用网格和材质创建一个物体
         Geometry geom = new Geometry("六边形");
         geom.setMesh(mesh);
