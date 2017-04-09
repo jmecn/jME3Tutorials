@@ -125,7 +125,7 @@ public class HelloMaterial extends SimpleApplication {
      * @return
      */
     private void addLightingBox() {
-        // #1 创建一个无光材质
+        // #1 创建一个能够显示光照的材质
         Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
 
         // #2 设置纹理贴图
