@@ -23,11 +23,18 @@ import com.jme3.shadow.PointLightShadowRenderer;
  *
  */
 public class HelloLight extends SimpleApplication {
-
+    
+    // 让点光源在方块的上空转圈，每4秒画一个完整的圆。
+    private final static float TOTAL_TIME = 4f;
+    private float time = 0f;
+    
     // 定向光
     private DirectionalLight sunLight;
+    
     // 点光源
     private PointLight pointLight;
+    private Vector3f lightPosition = new Vector3f(5.5f, 4, -5.5f);
+    
     // 环境光
     private AmbientLight ambientLight;
     
@@ -56,6 +63,26 @@ public class HelloLight extends SimpleApplication {
         addShadow();
     }
     
+    @Override
+    public void simpleUpdate(float tpf) {
+        /**
+         * 使用三角函数，计算光源的坐标。
+         */
+        // 根据时间，计算点光源的弧度
+        time += tpf;
+        if (time > TOTAL_TIME) {
+            time -= TOTAL_TIME;
+        }
+        float rad = time / TOTAL_TIME * FastMath.TWO_PI;
+        
+        // 圆心为(8.5f, 4, -8.5f)，半径为4f。当前坐标为：
+        lightPosition.x = 8.5f + 4f * FastMath.cos(rad);
+        lightPosition.y = 4f;
+        lightPosition.z = -8.5f + 4f * FastMath.sin(rad);
+        
+        pointLight.setPosition(lightPosition);
+    }
+    
     /**
      * 创建一个场景
      * @return
@@ -64,7 +91,7 @@ public class HelloLight extends SimpleApplication {
         Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
 
         // 创建一个平面，把它作为地板，用来承载光影
-        Geometry geom = new Geometry("Floor",  new Quad(20, 20));
+        Geometry geom = new Geometry("Floor",  new Quad(17, 17));
         geom.setMaterial(mat);
         geom.setShadowMode(ShadowMode.Receive);// 承载阴影
         
@@ -96,7 +123,7 @@ public class HelloLight extends SimpleApplication {
 
         // 点光源
         pointLight = new PointLight();
-        pointLight.setPosition(new Vector3f(5.5f, 4, -5.5f));
+        pointLight.setPosition(lightPosition);
         pointLight.setRadius(30);
         pointLight.setColor(new ColorRGBA(0.8f, 0.8f, 0f, 1f));
         
@@ -130,8 +157,5 @@ public class HelloLight extends SimpleApplication {
         plsr.setEdgeFilteringMode(mode);
         viewPort.addProcessor(plsr);
     }
-    
-    @Override
-    public void simpleUpdate(float tpf) {
-    }
+
 }
