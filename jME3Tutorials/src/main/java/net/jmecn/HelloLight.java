@@ -4,6 +4,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.PointLight;
+import com.jme3.light.SpotLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
@@ -16,6 +17,7 @@ import com.jme3.scene.shape.Quad;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.shadow.EdgeFilteringMode;
 import com.jme3.shadow.PointLightShadowRenderer;
+import com.jme3.shadow.SpotLightShadowRenderer;
 
 /**
  * 光与影
@@ -28,12 +30,15 @@ public class HelloLight extends SimpleApplication {
     private final static float TOTAL_TIME = 4f;
     private float time = 0f;
     
-    // 定向光
-    private DirectionalLight sunLight;
-    
     // 点光源
     private PointLight pointLight;
     private Vector3f lightPosition = new Vector3f(5.5f, 4, -5.5f);
+    
+    // 定向光
+    private DirectionalLight sunLight;
+    
+    // 聚光灯
+    private SpotLight spotLight;
     
     // 环境光
     private AmbientLight ambientLight;
@@ -81,6 +86,10 @@ public class HelloLight extends SimpleApplication {
         lightPosition.z = -8.5f + 4f * FastMath.sin(rad);
         
         pointLight.setPosition(lightPosition);
+        
+        // 使聚光灯始终跟随摄像机
+        spotLight.setPosition(cam.getLocation());  // 光源位置：摄像机的位置
+        spotLight.setDirection(cam.getDirection());// 光源方向：摄像机的方向
     }
     
     /**
@@ -108,18 +117,13 @@ public class HelloLight extends SimpleApplication {
                 rootNode.attachChild(geom);
             }
         }
-        
+       
     }
     
     /**
      * 添加光源
      */
     private void addLight() {
-        
-        // 定向光
-        sunLight = new DirectionalLight();
-        sunLight.setDirection(new Vector3f(-1, -2, -3));
-        sunLight.setColor(new ColorRGBA(0.2f, 0.2f, 0.2f, 1f));
 
         // 点光源
         pointLight = new PointLight();
@@ -127,13 +131,28 @@ public class HelloLight extends SimpleApplication {
         pointLight.setRadius(30);
         pointLight.setColor(new ColorRGBA(0.8f, 0.8f, 0f, 1f));
         
+        // 定向光
+        sunLight = new DirectionalLight();
+        sunLight.setDirection(new Vector3f(-1, -2, -3));
+        sunLight.setColor(new ColorRGBA(0.2f, 0.2f, 0.2f, 1f));
+        
+        // 聚光灯
+        spotLight = new SpotLight();
+        spotLight.setSpotRange(100f);                           // 射程
+        spotLight.setSpotInnerAngle(5f * FastMath.DEG_TO_RAD);  // 光锥内角
+        spotLight.setSpotOuterAngle(15f * FastMath.DEG_TO_RAD); // 光锥外角
+        spotLight.setColor(ColorRGBA.White.mult(0.8f));         // 光源颜色
+        spotLight.setPosition(new Vector3f(9.443982f, 13.542627f, 8.93058f));// 光源位置
+        spotLight.setDirection(new Vector3f(-0.06764714f, -0.647349f, -0.7591859f));// 光源方向
+        
         // 环境光
         ambientLight = new AmbientLight();
         ambientLight.setColor(new ColorRGBA(0.2f, 0.2f, 0.2f, 1f));
         
         // 将模型和光源添加到场景图中
-        rootNode.addLight(sunLight);
         rootNode.addLight(pointLight);
+        rootNode.addLight(sunLight);
+        rootNode.addLight(spotLight);
         rootNode.addLight(ambientLight);
     }
     
@@ -145,17 +164,23 @@ public class HelloLight extends SimpleApplication {
         int shadowMapSize = 512;
         EdgeFilteringMode mode = EdgeFilteringMode.PCFPOISSON;
         
+        // 点光源影子
+        PointLightShadowRenderer plsr = new PointLightShadowRenderer(assetManager, shadowMapSize);
+        plsr.setLight(pointLight);// 设置点光源
+        plsr.setEdgeFilteringMode(mode);
+        viewPort.addProcessor(plsr);
+        
         // 定向光影子
         DirectionalLightShadowRenderer dlsr = new DirectionalLightShadowRenderer(assetManager, shadowMapSize, 4);
         dlsr.setLight(sunLight);// 设置定向光源
         dlsr.setEdgeFilteringMode(mode);
         viewPort.addProcessor(dlsr);
         
-        // 点光源影子
-        PointLightShadowRenderer plsr = new PointLightShadowRenderer(assetManager, shadowMapSize);
-        plsr.setLight(pointLight);// 设置点光源
-        plsr.setEdgeFilteringMode(mode);
-        viewPort.addProcessor(plsr);
+        // 聚光灯影子
+        SpotLightShadowRenderer slsr = new SpotLightShadowRenderer(assetManager, shadowMapSize);
+        slsr.setLight(spotLight);
+        slsr.setEdgeFilteringMode(mode);
+        viewPort.addProcessor(slsr);
     }
 
 }
