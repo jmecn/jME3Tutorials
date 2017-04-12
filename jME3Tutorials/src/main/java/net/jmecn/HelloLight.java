@@ -181,6 +181,7 @@ public class HelloLight extends SimpleApplication {
         slsr.setLight(spotLight);
         slsr.setEdgeFilteringMode(mode);
         viewPort.addProcessor(slsr);
+        
     }
 
 }
