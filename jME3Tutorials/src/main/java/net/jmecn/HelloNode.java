@@ -97,7 +97,7 @@ public class HelloNode extends SimpleApplication {
         rootNode.addLight(sun);
         rootNode.addLight(ambient);
     }
-
+    
 	public static void main(String[] args) {
 		HelloNode app = new HelloNode();
 		app.start();
