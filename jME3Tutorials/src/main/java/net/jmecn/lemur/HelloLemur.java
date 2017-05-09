@@ -24,26 +24,28 @@ public class HelloLemur extends SimpleApplication {
 	@Override
 	public void simpleInitApp() {
 
-		// Initialize the globals access so that the defualt
-		// components can find what they need.
+		// 初始化Lemur GUI
 		GuiGlobals.initialize(this);
 
-		// Load the 'glass' style
+		// 加载 'glass' 样式
 		BaseStyles.loadGlassStyle();
 
-		// Set 'glass' as the default style when not specified
+		// 将'glass'设置为GUI默认样式
 		GuiGlobals.getInstance().getStyles().setDefaultStyle("glass");
 
-		// Create a simple container for our elements
+		// 创建一个Container作为窗口中其他GUI元素的容器
 		Container myWindow = new Container();
 		guiNode.attachChild(myWindow);
 
-		// Put it somewhere that we will see it
-		// Note: Lemur GUI elements grow down from the upper left corner.
+		// 设置窗口在屏幕上的坐标
+		// 注意：Lemur的GUI元素是以控件左上角为原点，向右、向下生成的。
+		// 然而，作为一个Spatial，它在GuiNode中的坐标原点依然是屏幕的左下角。
 		myWindow.setLocalTranslation(300, 300, 0);
 
-		// Add some elements
+		// 添加一个Label控件
 		myWindow.addChild(new Label("Hello, World."));
+		
+		// 添加一个Button控件
 		Button clickMe = myWindow.addChild(new Button("Click Me"));
 		clickMe.addClickCommands(new Command<Button>() {
 			@Override
