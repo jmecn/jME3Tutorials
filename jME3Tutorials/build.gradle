@@ -29,6 +29,8 @@ dependencies {
     compile "$jme3.g:jme3-lwjgl:$jme3.v"
     // 水面、粒子特效等
     compile "$jme3.g:jme3-effects:$jme3.v"
+    // 支持ogg音频格式
+    compile "$jme3.g:jme3-jogg:$jme3.v"
 
     /**
      * Lemur用于制作jME3的GUI
