@@ -3,6 +3,7 @@ package net.jmecn;
 import com.jme3.app.SimpleApplication;
 import com.jme3.audio.AudioData.DataType;
 import com.jme3.audio.AudioNode;
+import com.jme3.audio.Environment;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.MouseButtonTrigger;
@@ -77,6 +78,7 @@ public class HelloAudio extends SimpleApplication {
      * 创建两个AudioNode作为音源，并添加到场景中。。
      */
     private void initAudio() {
+
         /**
          * 创建一个“枪声”音源，用户点击鼠标时会发出枪声。
          */
@@ -86,7 +88,7 @@ public class HelloAudio extends SimpleApplication {
         audioGun.setVolume(2);
         // 将音源添加到场景中
         rootNode.attachChild(audioGun);
-
+        
         /**
          * 创建一个自然音效（海潮声），这个音源会一直循环播放。
          */
@@ -98,6 +100,15 @@ public class HelloAudio extends SimpleApplication {
         rootNode.attachChild(audioNature);
 
         audioNature.play(); // 持续播放
+        
+        /**
+         * 开启混响模式
+         */
+        audioNature.setReverbEnabled(true);
+    	/**
+    	 * 设置混响环境：洞穴
+    	 */
+        audioRenderer.setEnvironment(Environment.Dungeon);
     }
 
     /**
