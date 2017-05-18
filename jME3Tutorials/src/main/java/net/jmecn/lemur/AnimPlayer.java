@@ -25,7 +25,6 @@ import com.simsilica.lemur.FillMode;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.Label;
 import com.simsilica.lemur.ListBox;
-import com.simsilica.lemur.ProgressBar;
 import com.simsilica.lemur.RangedValueModel;
 import com.simsilica.lemur.Slider;
 import com.simsilica.lemur.component.BoxLayout;
@@ -176,11 +175,6 @@ public class AnimPlayer extends SimpleApplication {
 		box.getSelectionModel().setSelection(0);// 默认选中第1个
 		wnd.addChild(box);
 		
-		// 动画进度条
-		ProgressBar progress = new ProgressBar();
-		progressModel = progress.getModel();
-		wnd.addChild(progress);
-		
 		// 控制面板
 		Container container = new Container(new BoxLayout(Axis.X, FillMode.Even));
 		wnd.addChild(container);
@@ -211,7 +205,7 @@ public class AnimPlayer extends SimpleApplication {
 		container.addChild(checkBox);
 		
 		// 将窗口置于屏幕右上角
-		wnd.setLocalTranslation(cam.getWidth() - wnd.getPreferredSize().x - 10, cam.getHeight() - 10, 0);
+		wnd.setLocalTranslation(cam.getWidth() - wnd.getPreferredSize().x - 10, (cam.getHeight() + wnd.getPreferredSize().y) * 0.5f, 0);
 	}
 	
 	/**
@@ -219,6 +213,7 @@ public class AnimPlayer extends SimpleApplication {
 	 */
 	private void getRotateWnd() {
 		
+	    // 滑动条，用于旋转模型
 		Slider slider = new Slider(new DefaultRangedValueModel(-180, 180, 0));
 		rotation = slider.getModel().createReference();
 		guiNode.attachChild(slider);
@@ -227,13 +222,16 @@ public class AnimPlayer extends SimpleApplication {
 		slider.setPreferredSize(size);
 		
 		float width = cam.getWidth();
+		float height = cam.getHeight();
 		slider.setLocalTranslation((width-size.x)*0.5f, size.y + 10, 0);
 		
-		
+		// 动画进度条
 		SeekBar seekBar = new SeekBar();
+		progressModel = seekBar.getModel();
 		guiNode.attachChild(seekBar);
 		
-		size = seekBar.getPreferredSize();
-		seekBar.setLocalTranslation((width-size.x)*0.5f, size.y + 10 + 50, 0);
+		size = new Vector3f(width - 20, 12, 1);
+		seekBar.setPreferredSize(size);
+		seekBar.setLocalTranslation((width-size.x)*0.5f, height - size.y, 0);
 	}
 }
