@@ -151,6 +151,15 @@ public class HelloAnimation extends SimpleApplication {
 	private ActionListener actionListener = new ActionListener() {
 		@Override
 		public void onAction(String name, boolean isPressed, float tpf) {
+			/**
+			 * 若Jaime已经处于JumpStart/Jumping/JumpEnd状态，就不要再做其他动作了。
+			 */
+			// 查询当前正在播放的动画
+			String curAnim = animChannel.getAnimationName();
+			if (curAnim != null && curAnim.startsWith("Jump")) {
+				return;
+			}
+			
 			if (WALK.equals(name)) {// 走
 				
 				// 记录行走状态
@@ -169,17 +178,6 @@ public class HelloAnimation extends SimpleApplication {
 			} else if (JUMP.equals(name)) {// 跳
 				
 				if (isPressed) {
-					
-					/**
-					 * 若Jaime已经处于JumpStart/Jumping/JumpEnd状态，就不要再做起跳动作了。
-					 */
-					
-					// 查询当前正在播放的动画
-					String curAnim = animChannel.getAnimationName();
-					if (curAnim != null && curAnim.startsWith("Jump")) {
-						
-						return;
-					}
 					
 					// 播放“起跳”动画
 					animChannel.setAnim("JumpStart");
