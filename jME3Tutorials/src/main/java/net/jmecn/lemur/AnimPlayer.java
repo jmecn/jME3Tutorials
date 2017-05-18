@@ -228,5 +228,12 @@ public class AnimPlayer extends SimpleApplication {
 		
 		float width = cam.getWidth();
 		slider.setLocalTranslation((width-size.x)*0.5f, size.y + 10, 0);
+		
+		
+		SeekBar seekBar = new SeekBar();
+		guiNode.attachChild(seekBar);
+		
+		size = seekBar.getPreferredSize();
+		seekBar.setLocalTranslation((width-size.x)*0.5f, size.y + 10 + 50, 0);
 	}
 }
