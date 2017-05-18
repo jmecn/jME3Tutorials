@@ -21,6 +21,7 @@ public class HelloLemur extends SimpleApplication {
 		app.start();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void simpleInitApp() {
 
