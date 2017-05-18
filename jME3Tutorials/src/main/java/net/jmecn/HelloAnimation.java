@@ -163,7 +163,7 @@ public class HelloAnimation extends SimpleApplication {
 				} else {
 					// 播放“闲置”动画
 					animChannel.setAnim("Idle");
-					animChannel.setLoopMode(LoopMode.DontLoop);
+					animChannel.setLoopMode(LoopMode.Loop);
 				}
 				
 			} else if (JUMP.equals(name)) {// 跳
@@ -200,6 +200,7 @@ public class HelloAnimation extends SimpleApplication {
 				// “起跳”动作结束后，紧接着播放“着地”动画。
 				channel.setAnim("JumpEnd");
 				channel.setLoopMode(LoopMode.DontLoop);
+				channel.setSpeed(1.5f);
 				
 			} else if ("JumpEnd".equals(animName)) {
 				// “着地”后，根据按键状态来播放“行走”或“闲置”动画。
@@ -208,7 +209,7 @@ public class HelloAnimation extends SimpleApplication {
 					channel.setLoopMode(LoopMode.Loop);
 				} else {
 					channel.setAnim("Idle");
-					channel.setLoopMode(LoopMode.DontLoop);
+					channel.setLoopMode(LoopMode.Loop);
 				}
 			}
 		}
