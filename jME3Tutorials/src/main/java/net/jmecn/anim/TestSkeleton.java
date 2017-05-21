@@ -41,12 +41,13 @@ public class TestSkeleton extends SimpleApplication {
         SkeletonDebugger skeletonDebugger = new SkeletonDebugger("debugger", animControl.getSkeleton());
         skeletonDebugger.setMaterial(mat);
         
-        // 将SkeletonDebugger的姿态与Jaime同步。
+        // 将SkeletonDebugger的姿态与Jaime的几何体同步。
         Spatial child = jaime.getChild(0);
         skeletonDebugger.setLocalTransform(child.getLocalTransform());
 
         jaime.attachChild(skeletonDebugger);
 
+        // 将Jaime放大一点点，这样我们能观察得更清楚。
         jaime.scale(5f);
     }
 
