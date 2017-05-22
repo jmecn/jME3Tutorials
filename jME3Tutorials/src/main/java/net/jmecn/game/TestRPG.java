@@ -15,12 +15,16 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.PointLight;
+import com.jme3.light.SpotLight;
 import com.jme3.material.Material;
+import com.jme3.material.TechniqueDef;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.BloomFilter;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -44,6 +48,8 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
         app.start();
     }
 
+    // 玩家
+    private Spatial player;
     // 平台
     private Spatial floor;
     // 标志
@@ -55,7 +61,7 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
     private boolean isWalking = false;
 
     public TestRPG() {
-        super(new StatsAppState(), new ChaseCameraAppState());
+        super(new StatsAppState(), new ChaseCameraAppState(), new AiAppState());
     }
 
     @Override
@@ -64,6 +70,8 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
         initKeys();
         initScene();
         initLights();
+        
+        stateManager.getState(AiAppState.class).setPlayer(player);
     }
 
     /**
@@ -106,7 +114,7 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
      */
     private void initScene() {
         // 加载Jaime模型
-        loadJaime();
+        this.player = loadJaime();
 
         // 创建一个平面作为舞台
         this.floor = createFloor();
@@ -199,18 +207,34 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
      * 初始化光源
      */
     private void initLights() {
+    	renderManager.setPreferredLightMode(TechniqueDef.LightMode.SinglePass);
+        renderManager.setSinglePassLightBatchSize(6);
+        
         // 环境光
-        AmbientLight ambientLight = new AmbientLight();
-        ambientLight.setColor(new ColorRGBA(0.6f, 0.6f, 0.6f, 1f));
-
-        // 将光源添加到场景图中
-        rootNode.addLight(ambientLight);
-
+        rootNode.addLight(new AmbientLight());
+        
+        // 聚光灯
+        SpotLight sl = new SpotLight();
+        sl.setColor(ColorRGBA.White.mult(1.0f));
+        sl.setPosition(new Vector3f(0f, 16f, 0f));
+        sl.setDirection(sl.getPosition().mult(-1)); 
+        sl.setSpotOuterAngle(0.3f);
+        sl.setSpotInnerAngle(0.05f);      
+        rootNode.addLight(sl);
+        
         // 点光源
-        addPointLight(new Vector3f(16, 8, 0), new ColorRGBA(1f, 1f, 0.3f, 1f));
-        addPointLight(new Vector3f(-16, 8, 0), new ColorRGBA(0.3f, 0.3f, 1f, 1f));
+        addPointLight(new Vector3f(13, 8, 13), ColorRGBA.Yellow);
+        addPointLight(new Vector3f(13, 8, -13), ColorRGBA.Yellow);
+        addPointLight(new Vector3f(-13, 8, 13), ColorRGBA.Yellow);
+        addPointLight(new Vector3f(-13, 8, -13), ColorRGBA.Yellow);
 
         rootNode.setShadowMode(ShadowMode.CastAndReceive);
+        
+        // 发光滤镜
+        FilterPostProcessor fpp=new FilterPostProcessor(assetManager);
+        BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
+        fpp.addFilter(bloom);
+        viewPort.addProcessor(fpp);
     }
 
     /**
@@ -222,6 +246,7 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
     	// 创建一个小球，表示光源的位置。
     	Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
     	mat.setColor("Color", color);
+    	mat.setColor("GlowColor", color);
     	
     	Geometry geom = new Geometry("LightSource", new Sphere(6, 12, 0.2f));
     	geom.setMaterial(mat);
@@ -232,7 +257,7 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
         // 点光源
         PointLight pointLight = new PointLight();
         pointLight.setPosition(position);
-        pointLight.setRadius(40);
+        pointLight.setRadius(16);
         pointLight.setColor(color);
         rootNode.addLight(pointLight);
 

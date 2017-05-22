@@ -30,7 +30,11 @@ public class MotionControl extends AbstractControl {
     private Observer observer;
 
     public MotionControl() {
-        walkSpeed = 1.0f;
+        this(1.0f);
+    }
+    
+    public MotionControl(float walkSpeed) {
+        this.walkSpeed = walkSpeed;
         walkDir = null;
         target = null;
         loc = new Vector3f();
@@ -61,6 +65,11 @@ public class MotionControl extends AbstractControl {
     public void setTarget(Vector3f target) {
         this.target = target;
 
+        if (target == null) {
+        	walkDir = null;
+        	return;
+        }
+        
         // 当模型面朝目标点
         this.spatial.lookAt(target, Vector3f.UNIT_Y);
 
@@ -81,7 +90,7 @@ public class MotionControl extends AbstractControl {
      * 重写主循环，让这个模型向目标点移动。
      */
     @Override
-    public void controlUpdate(float tpf) {
+    protected void controlUpdate(float tpf) {
         if (walkDir != null) {
 
             // 计算下一步的步长
@@ -105,7 +114,9 @@ public class MotionControl extends AbstractControl {
                 target = null;
 
                 // 通知观察者，已经抵达目标点了。
-                observer.onReachTarget();
+                if (observer != null) {
+                	observer.onReachTarget();
+                }
             }
 
         }
