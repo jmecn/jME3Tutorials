@@ -1,7 +1,5 @@
 package net.jmecn.game;
 
-import java.util.List;
-
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.BaseAppState;
@@ -16,7 +14,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 
 /**
- * Ai模块
+ * AI模块
  * @author yanmaoyuan
  *
  */
@@ -36,7 +34,7 @@ public class AiAppState extends BaseAppState {
 		// 平静状态下的材质
 		peaceMat = new Material(getApplication().getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
 		peaceMat.setColor("Diffuse", ColorRGBA.Green);
-		peaceMat.setColor("Ambient", ColorRGBA.Black);
+		peaceMat.setColor("Ambient", ColorRGBA.Green.mult(0.2f));
 		peaceMat.setBoolean("UseMaterialColors", true);
 		
 		// 愤怒状态下的材质
@@ -71,7 +69,11 @@ public class AiAppState extends BaseAppState {
 		rootNode.removeFromParent();
 	}
 	
-	private Spatial createMob() {
+	/**
+	 * 创造一个怪物
+	 * @return
+	 */
+	private Node createMob() {
 		// 创建一个方块，作为怪物的外形。
 		Geometry geom = new Geometry("Cube", new Box(0.5f, 0.5f, 0.5f));
 		geom.setMaterial(peaceMat);
@@ -89,41 +91,100 @@ public class AiAppState extends BaseAppState {
 		mob.addControl(new MotionControl(3.0f));
 		return mob;
 	}
-
+	
+	/**
+	 * 设置玩家
+	 * @param player
+	 */
 	public void setPlayer(Spatial player) {
 		this.player = player;
 	}
 	
+	/**
+	 * 主循环
+	 */
+	@Override
 	public void update(float tpf) {
 		
 		if (player != null) {
 			
-			List<Spatial> children = rootNode.getChildren();
-			int size = children.size();
-			for(int i=0; i<size; i++) {
-				Node child = (Node)children.get(i);
+			Spatial[] children = rootNode.getChildren().toArray(new Spatial[0]);
+			
+			for(int i=0; i<children.length; i++) {
+				Node child = (Node)children[i];
 				
-				// 计算敌人和自己的距离
-				Vector3f pLoc = player.getWorldTranslation();
-				Vector3f thisLoc = child.getWorldTranslation();
-				
-				float dist = pLoc.distance(thisLoc);
-				
-				if (dist <= 5f && dist > 1f) {
-					// 设置目标
-					child.getControl(MotionControl.class).setTarget(new Vector3f(pLoc));
-				} else {
-					child.getControl(MotionControl.class).setTarget(null);
+				if (reachBounds(child)) {
+					// 消灭原有方块
+					child.removeFromParent();
+					
+					// 重新刷一个方块
+					child = createMob();
+					rootNode.attachChild(child);
 				}
 				
-				if (dist <= 5f) {
+				// 计算玩家和方块之间距离
+				Vector3f mobLoc = child.getLocalTranslation();
+				Vector3f playerLoc = player.getLocalTranslation();
+				float dist = playerLoc.distance(mobLoc);
+				
+				/**
+				 * 根据玩家和方块之间的距离，决定方块的外观。
+				 */
+				if (dist <= 6f) {
 					child.setMaterial(angryMat);
 				} else {
 					child.setMaterial(peaceMat);
 				}
+				
+				/**
+				 * 根据玩家和方块之间的距离，决定方块的行为。
+				 */
+				MotionControl motionControl = child.getControl(MotionControl.class);
+				if (dist <= 6f && dist > 2f) {
+					// 玩家靠近了！躲开玩家！
+					Vector3f dir = mobLoc.subtract(playerLoc);
+					dir.addLocal(mobLoc);
+					dir.y = 0;
+					
+					motionControl.setTarget(dir);
+				} else if (dist > 6){
+					// 玩家离得比较远，不用管他了。
+					motionControl.setTarget(null);
+				} else {
+					// 被玩家追上了！
+					if (motionControl.isEnabled()) {
+						motionControl.setEnabled(false);
+						
+						child.move(0, 0.5f, 0);
+						child.addControl(new FloatControl(0.2f, 1f));
+					}
+				}
+				
 			}
 		}
 
-
+	}
+	
+	/**
+	 * 边界检测
+	 */
+	private boolean reachBounds(Spatial child) {
+		boolean flag = false;
+		
+		Vector3f mobLoc = child.getLocalTranslation();
+		if (mobLoc.x > 24.5f) {
+			flag = true;
+		} else if (mobLoc.x < -24.5) {
+			flag = true;
+		}
+		
+		if (mobLoc.z > 24.5) {
+			flag = true;
+		} else if (mobLoc.z < -24.5) {
+			flag = true;
+		}
+		
+		return flag;
+		
 	}
 }

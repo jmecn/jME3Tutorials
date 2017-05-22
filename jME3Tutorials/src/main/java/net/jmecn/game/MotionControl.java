@@ -16,6 +16,8 @@ public class MotionControl extends AbstractControl {
     
     // 运动速度
     private float walkSpeed = 1.0f;
+    private float speedFactor = 1.0f;
+    
     // 运动的方向向量
     private Vector3f walkDir;
     // 运动一步的向量
@@ -46,7 +48,7 @@ public class MotionControl extends AbstractControl {
      * @param walkSpeed
      */
     public void setWalkSpeed(float walkSpeed) {
-        this.walkSpeed = walkSpeed;
+        this.speedFactor = walkSpeed;
     }
     
     /**
@@ -94,7 +96,11 @@ public class MotionControl extends AbstractControl {
         if (walkDir != null) {
 
             // 计算下一步的步长
-            float stepDist = walkSpeed * tpf;
+            float stepDist = walkSpeed * tpf * speedFactor;
+            
+            if (stepDist == 0f) {
+            	return;
+            }
 
             // 计算离目标点的距离
             float dist = loc.distance(target);

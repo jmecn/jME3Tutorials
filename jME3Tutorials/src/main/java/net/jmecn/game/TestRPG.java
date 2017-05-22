@@ -13,18 +13,12 @@ import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
-import com.jme3.light.AmbientLight;
-import com.jme3.light.PointLight;
-import com.jme3.light.SpotLight;
 import com.jme3.material.Material;
-import com.jme3.material.TechniqueDef;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import com.jme3.post.FilterPostProcessor;
-import com.jme3.post.filters.BloomFilter;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -32,8 +26,6 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
-import com.jme3.shadow.EdgeFilteringMode;
-import com.jme3.shadow.PointLightShadowRenderer;
 
 /**
  * 测试RPG游戏中常见的运动方式。
@@ -48,8 +40,6 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
         app.start();
     }
 
-    // 玩家
-    private Spatial player;
     // 平台
     private Spatial floor;
     // 标志
@@ -59,9 +49,10 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
 
     private AnimChannel animChannel;
     private boolean isWalking = false;
+    private boolean isRunning = false;
 
     public TestRPG() {
-        super(new StatsAppState(), new ChaseCameraAppState(), new AiAppState());
+        super(new StatsAppState(), new ChaseCameraAppState(), new AiAppState(), new LightAppState());
     }
 
     @Override
@@ -69,9 +60,6 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
         initCamera();
         initKeys();
         initScene();
-        initLights();
-        
-        stateManager.getState(AiAppState.class).setPlayer(player);
     }
 
     /**
@@ -105,8 +93,9 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
      */
     private void initKeys() {
         inputManager.addMapping("LeftClick", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        inputManager.addMapping("Run", new KeyTrigger(KeyInput.KEY_R));
         inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
-        inputManager.addListener(this, "LeftClick", "Jump");
+        inputManager.addListener(this, "LeftClick", "Jump", "Run");
     }
 
     /**
@@ -114,7 +103,7 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
      */
     private void initScene() {
         // 加载Jaime模型
-        this.player = loadJaime();
+        loadJaime();
 
         // 创建一个平面作为舞台
         this.floor = createFloor();
@@ -141,11 +130,11 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
         jaime.attachChild(camPiovt);
 
         stateManager.getState(ChaseCameraAppState.class).setTarget(camPiovt);
-
+        stateManager.getState(AiAppState.class).setPlayer(jaime);
+        
         // 添加一个运动组件
-        jaime.addControl(motionControl = new MotionControl());
+        jaime.addControl(motionControl = new MotionControl(4.0f));
         motionControl.setObserver(this);
-        motionControl.setWalkSpeed(4.0f);
 
         AnimControl animControl = jaime.getControl(AnimControl.class);
         animControl.addListener(this);
@@ -203,70 +192,6 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
         return flagNode;
     }
 
-    /**
-     * 初始化光源
-     */
-    private void initLights() {
-    	renderManager.setPreferredLightMode(TechniqueDef.LightMode.SinglePass);
-        renderManager.setSinglePassLightBatchSize(6);
-        
-        // 环境光
-        rootNode.addLight(new AmbientLight());
-        
-        // 聚光灯
-        SpotLight sl = new SpotLight();
-        sl.setColor(ColorRGBA.White.mult(1.0f));
-        sl.setPosition(new Vector3f(0f, 16f, 0f));
-        sl.setDirection(sl.getPosition().mult(-1)); 
-        sl.setSpotOuterAngle(0.3f);
-        sl.setSpotInnerAngle(0.05f);      
-        rootNode.addLight(sl);
-        
-        // 点光源
-        addPointLight(new Vector3f(13, 8, 13), ColorRGBA.Yellow);
-        addPointLight(new Vector3f(13, 8, -13), ColorRGBA.Yellow);
-        addPointLight(new Vector3f(-13, 8, 13), ColorRGBA.Yellow);
-        addPointLight(new Vector3f(-13, 8, -13), ColorRGBA.Yellow);
-
-        rootNode.setShadowMode(ShadowMode.CastAndReceive);
-        
-        // 发光滤镜
-        FilterPostProcessor fpp=new FilterPostProcessor(assetManager);
-        BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
-        fpp.addFilter(bloom);
-        viewPort.addProcessor(fpp);
-    }
-
-    /**
-     * 创造一个点光源
-     * @param position
-     * @param color
-     */
-    private void addPointLight(Vector3f position, ColorRGBA color) {
-    	// 创建一个小球，表示光源的位置。
-    	Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-    	mat.setColor("Color", color);
-    	mat.setColor("GlowColor", color);
-    	
-    	Geometry geom = new Geometry("LightSource", new Sphere(6, 12, 0.2f));
-    	geom.setMaterial(mat);
-    	geom.setLocalTranslation(position);
-    	geom.setShadowMode(ShadowMode.Off);
-    	rootNode.attachChild(geom);
-    	
-        // 点光源
-        PointLight pointLight = new PointLight();
-        pointLight.setPosition(position);
-        pointLight.setRadius(16);
-        pointLight.setColor(color);
-        rootNode.addLight(pointLight);
-
-        // 点光源影子
-        PointLightShadowRenderer plsr = new PointLightShadowRenderer(assetManager, 1024);
-        plsr.setLight(pointLight);// 设置点光源
-        plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF4);
-        viewPort.addProcessor(plsr);
-    }
 
     @Override
     public void onAction(String name, boolean isPressed, float tpf) {
@@ -283,11 +208,34 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
             if ("LeftClick".equals(name)) {
                 pickTarget();
             } else if ("Jump".equals(name)) {
-                motionControl.setWalkSpeed(6.0f);
+            	// 跳跃时是原有速度的1.5倍
+                if (isRunning) {
+                	motionControl.setWalkSpeed(3.0f);
+                } else {
+                	motionControl.setWalkSpeed(1.5f);
+                }
+                
                 // 播放“起跳”动画
                 animChannel.setAnim("JumpStart");
                 animChannel.setLoopMode(LoopMode.DontLoop);
                 animChannel.setSpeed(1.5f);
+            } else if ("Run".equals(name)) {
+            	isRunning = !isRunning;
+            	
+            	if (isRunning) {
+                	motionControl.setWalkSpeed(1.5f);
+                	if (curAnim.equals("Walk")) {
+                		animChannel.setAnim("Run");
+                		animChannel.setSpeed(2f);
+                	}
+                } else {
+                	motionControl.setWalkSpeed(1.0f);
+                	if (curAnim.equals("Run")) {
+                		animChannel.setAnim("Walk");
+                		animChannel.setSpeed(2f);
+                	}
+                }
+            	
             }
         }
     }
@@ -324,9 +272,13 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
         motionControl.setTarget(target);
 
         if (!isWalking) {
-            animChannel.setAnim("Walk");
-            animChannel.setSpeed(2.0f);
             isWalking = true;
+            if (isRunning) {
+            	animChannel.setAnim("Run");
+            } else {
+            	animChannel.setAnim("Walk");
+            }
+            animChannel.setSpeed(2.0f);
         }
     }
 
@@ -335,7 +287,11 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
         // 恢复行走速度
         String curAnim = animChannel.getAnimationName();
         if (curAnim != null && curAnim.startsWith("Jump")) {
-            motionControl.setWalkSpeed(4.0f);
+            if (isRunning) {
+            	motionControl.setWalkSpeed(1.5f);
+            } else {
+            	motionControl.setWalkSpeed(1.0f);
+            }
         }
 
         // 到达目标点，把动画改为Idle
@@ -357,11 +313,21 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
             channel.setSpeed(1.5f);
 
         } else if ("JumpEnd".equals(animName)) {
-            motionControl.setWalkSpeed(4.0f);
+            if (isRunning) {
+            	motionControl.setWalkSpeed(1.5f);
+            } else {
+            	motionControl.setWalkSpeed(1.0f);
+            }
+            
             // “着地”后，根据按键状态来播放“行走”或“闲置”动画。
             if (isWalking) {
-                channel.setAnim("Walk");
-                channel.setSpeed(1.5f);
+            	if (isRunning) {
+            		channel.setAnim("Run");
+            		channel.setSpeed(2f);
+            	} else {
+            		channel.setAnim("Walk");
+            		channel.setSpeed(2f);
+            	}
             } else {
                 channel.setAnim("Idle");
             }
