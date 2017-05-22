@@ -74,12 +74,14 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
         // 设置跟踪相机的参数
         ChaseCameraAppState chaseCam = stateManager.getState(ChaseCameraAppState.class);
 
+        // 仰角最小10°，最大90°，默认30°
         chaseCam.setMinVerticalRotation(FastMath.DEG_TO_RAD * 10);
         chaseCam.setDefaultVerticalRotation(FastMath.DEG_TO_RAD * 30);
 
+        // 摄像机到观察点的距离，最小5f，最大30f，默认5f
         chaseCam.setMinDistance(5f);
-        chaseCam.setMaxDistance(20f);
-        chaseCam.setDefaultDistance(5f);
+        chaseCam.setMaxDistance(30f);
+        chaseCam.setDefaultDistance(10f);
 
         chaseCam.setInvertVerticalAxis(true);
         chaseCam.setInvertHorizontalAxis(true);
@@ -155,7 +157,7 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
     private Spatial createFloor() {
 
         Quad q = new Quad(50, 50);
-        q.scaleTextureCoordinates(new Vector2f(20, 20));
+        q.scaleTextureCoordinates(new Vector2f(10, 10));
         Geometry stage = new Geometry("Stage", q);
         stage.setMaterial(assetManager.loadMaterial("Textures/Terrain/Pond/Pond.j3m"));
 
@@ -205,13 +207,28 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
         rootNode.addLight(ambientLight);
 
         // 点光源
-        addPointLight(new Vector3f(25, 10, 0), new ColorRGBA(0.5f, 0.5f, 0f, 1f));
-        addPointLight(new Vector3f(-25, 10, 0), new ColorRGBA(0f, 0.5f, 0.5f, 1f));
+        addPointLight(new Vector3f(16, 8, 0), new ColorRGBA(1f, 1f, 0.3f, 1f));
+        addPointLight(new Vector3f(-16, 8, 0), new ColorRGBA(0.3f, 0.3f, 1f, 1f));
 
         rootNode.setShadowMode(ShadowMode.CastAndReceive);
     }
 
+    /**
+     * 创造一个点光源
+     * @param position
+     * @param color
+     */
     private void addPointLight(Vector3f position, ColorRGBA color) {
+    	// 创建一个小球，表示光源的位置。
+    	Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    	mat.setColor("Color", color);
+    	
+    	Geometry geom = new Geometry("LightSource", new Sphere(6, 12, 0.2f));
+    	geom.setMaterial(mat);
+    	geom.setLocalTranslation(position);
+    	geom.setShadowMode(ShadowMode.Off);
+    	rootNode.attachChild(geom);
+    	
         // 点光源
         PointLight pointLight = new PointLight();
         pointLight.setPosition(position);
