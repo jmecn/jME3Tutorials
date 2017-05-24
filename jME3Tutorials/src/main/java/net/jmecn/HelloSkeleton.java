@@ -98,7 +98,7 @@ public class HelloSkeleton extends SimpleApplication {
         // 创建材质
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.Green);
-        mat.getAdditionalRenderState().setDepthTest(false);// 禁用深度测试，实现光透视效果。
+        mat.getAdditionalRenderState().setDepthTest(false);// 禁用深度测试，实现透视效果。
         sd.setMaterial(mat);
 
         /**
