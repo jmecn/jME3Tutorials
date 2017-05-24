@@ -37,7 +37,7 @@ public class HelloSkeleton extends SimpleApplication {
     public final static String TOGGLE_SKELETON_CONTROL = "toggle_SkeletonControl";
     
     /**
-     * 按F3移除/添加Jaime左手的附件。
+     * 按F3移除/添加Jaime的附件。
      */
     public final static String TOGGLE_ATTACHMENT = "toggle_attachment";
     
@@ -50,8 +50,8 @@ public class HelloSkeleton extends SimpleApplication {
     // 骨骼控制器
     private SkeletonControl sc;
     
-    // Jaime的左手
-    private Node leftHand;
+    // Jaime的右手
+    private Node rightHand;
     // Jaime的棍子
     private Spatial stick;
     
@@ -106,8 +106,8 @@ public class HelloSkeleton extends SimpleApplication {
          */
         stick = createAttachment();
         
-        leftHand = sc.getAttachmentsNode("hand.L");
-        leftHand.attachChild(stick);
+        rightHand = sc.getAttachmentsNode("hand.L");
+        rightHand.attachChild(stick);
         
         /**
          * 播放骨骼动画
@@ -159,7 +159,7 @@ public class HelloSkeleton extends SimpleApplication {
         head1.move(0, 0, 0.8f);
         head2.move(0, 0, -0.8f);
         
-        // 稍微调整一下这根棍子的姿态，使它和Jaime的左手掌心契合。
+        // 稍微调整一下这根棍子的姿态，使它和Jaime的右手掌心契合。
         node.rotate(0, FastMath.HALF_PI, 0);
         node.move(0.8f, 0.1f, 0.05f);
         return node;
@@ -209,13 +209,13 @@ public class HelloSkeleton extends SimpleApplication {
     }
     
     /**
-     * 移除或添加Jaime左手的附件
+     * 移除或添加Jaime右手的附件
      */
     private void toggleAttachment() {
         if (stick.getParent() != null) {
             stick.removeFromParent();
         } else {
-            leftHand.attachChild(stick);
+            rightHand.attachChild(stick);
         }
             
     }
