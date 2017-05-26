@@ -1,4 +1,4 @@
-package net.jmecn.motion;
+package net.jmecn.anim;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package net.jmecn.motion;
+package net.jmecn.anim;
 
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
@@ -14,8 +14,6 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Spline.SplineType;
 import com.jme3.math.Vector3f;
-import com.jme3.post.FilterPostProcessor;
-import com.jme3.post.ssao.SSAOFilter;
 import com.jme3.scene.Spatial;
 
 /**
@@ -23,11 +21,11 @@ import com.jme3.scene.Spatial;
  * @author yanmaoyuan
  *
  */
-public class Main extends SimpleApplication {
+public class TestMotion extends SimpleApplication {
 
 	public static void main(String[] args) {
 		// 启动程序
-		Main app = new Main();
+		TestMotion app = new TestMotion();
 		app.start();
 	}
 	
@@ -99,12 +97,6 @@ public class Main extends SimpleApplication {
 		
 		rootNode.addLight(ambient);
 		rootNode.addLight(sun);
-		
-		FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
-		fpp.setNumSamples(16);
-		
-		fpp.addFilter(new SSAOFilter());
-		viewPort.addProcessor(fpp);
 	}
 	
 	/**
@@ -200,7 +192,6 @@ public class Main extends SimpleApplication {
         };
 
         inputManager.addListener(acl, "display_hidePath", "play_stop", "SwitchPathInterpolation", "tensionUp", "tensionDown");
-
 	}
 
 }
