@@ -1,4 +1,4 @@
-package net.jmecn.game;
+package net.jmecn.logic;
 
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;

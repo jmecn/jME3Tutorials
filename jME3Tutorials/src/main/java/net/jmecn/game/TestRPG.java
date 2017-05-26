@@ -27,6 +27,8 @@ import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
 
+import net.jmecn.logic.FloatControl;
+
 /**
  * 测试RPG游戏中常见的运动方式。
  * 
@@ -54,7 +56,7 @@ public class TestRPG extends SimpleApplication implements ActionListener, AnimEv
     public TestRPG() {
         super(new StatsAppState(), new ChaseCameraAppState(), new AiAppState(), new LightAppState());
     }
-
+    
     @Override
     public void simpleInitApp() {
         initCamera();

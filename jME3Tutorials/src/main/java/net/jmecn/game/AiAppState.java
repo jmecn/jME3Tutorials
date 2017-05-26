@@ -13,6 +13,8 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 
+import net.jmecn.logic.FloatControl;
+
 /**
  * AI模块
  * @author yanmaoyuan
