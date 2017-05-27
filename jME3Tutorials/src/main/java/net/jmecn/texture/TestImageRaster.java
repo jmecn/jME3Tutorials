@@ -16,7 +16,7 @@ import com.jme3.texture.image.ImageRaster;
 /**
  * 演示ImageRaster的使用。
  * 
- * @author yan
+ * @author yanmaoyuan
  *
  */
 public class TestImageRaster extends SimpleApplication {
@@ -35,7 +35,7 @@ public class TestImageRaster extends SimpleApplication {
 		// 在内存中创建一个图像
 		Image image = new Image(format, 
 				width, height, 
-				ByteBuffer.allocate(byteSize),
+				ByteBuffer.allocateDirect(byteSize),
 				null,// mipmap size
 				ColorSpace.sRGB);
 		
