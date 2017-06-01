@@ -83,6 +83,10 @@ varying vec3 lightVec;
 #endif
 
 #ifdef USE_FOG
+    #ifndef USE_REFLECTION
+        uniform vec3 g_CameraPosition;
+    #endif
+    
     uniform float m_FogDensity;
 
     varying float fogFactor;
@@ -179,7 +183,9 @@ void main(){
     #endif 
     
     #ifdef USE_FOG
-        fogFactor = exp2(-m_FogDensity * m_FogDensity * wvPosition.z *  wvPosition.z * LOG2 );
+        vec4 worldSpacePos = g_WorldMatrix * modelSpacePos;
+        float dist = length(worldSpacePos.xyz-g_CameraPosition.xyz);
+        fogFactor = exp2(-m_FogDensity * m_FogDensity * dist *  dist * LOG2 );
         fogFactor = clamp(fogFactor, 0.0, 1.0);
     #endif  
 }

@@ -14,7 +14,8 @@ MaterialDef Fog{
         FragmentShader GLSL100: Materials/Fog/Fog.frag
 
         WorldParameters {
-            WorldViewMatrix
+            WorldMatrix
+            CameraPosition
             WorldViewProjectionMatrix
         }
         
