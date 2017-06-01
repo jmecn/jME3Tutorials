@@ -1,0 +1,25 @@
+MaterialDef Fog{
+
+    MaterialParameters {
+        // For fog
+        Boolean UseFog
+        Color Color : 1.0 0.0 0.0 1.0 // red
+        Color FogColor : 1.0 1.0 1.0 1.0 // white
+        //Float FogDistance : 800.0
+        Float FogDensity : 0.05
+    }
+
+    Technique {
+        VertexShader GLSL100:   Materials/Fog/Fog.vert
+        FragmentShader GLSL100: Materials/Fog/Fog.frag
+
+        WorldParameters {
+            WorldViewMatrix
+            WorldViewProjectionMatrix
+        }
+        
+        Defines {
+            USE_FOG : UseFog
+        }
+    }
+}
