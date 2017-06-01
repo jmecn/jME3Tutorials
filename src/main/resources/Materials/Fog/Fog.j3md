@@ -10,12 +10,10 @@ MaterialDef Fog{
     }
 
     Technique {
-        VertexShader GLSL100:   Materials/Fog/Fog.vert
+        VertexShader GLSL100:   Common/MatDefs/Misc/Unshaded.vert
         FragmentShader GLSL100: Materials/Fog/Fog.frag
 
         WorldParameters {
-            WorldMatrix
-            CameraPosition
             WorldViewProjectionMatrix
         }
         

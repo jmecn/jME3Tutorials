@@ -41,6 +41,7 @@ public class TestFogShader extends SimpleApplication {
     private void createScene() {
         Material mat = new Material(assetManager, "Materials/Fog/Fog.j3md");
         mat.setColor("Color", ColorRGBA.Green);
+        mat.setFloat("FogDensity", 0.03f);
         mat.setBoolean("UseFog", true);// Let the fog work
 
         Geometry geom = new Geometry("Floor", new Quad(40, 40));

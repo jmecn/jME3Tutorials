@@ -74,7 +74,8 @@ uniform float m_AlphaDiscardThreshold;
 
 #ifdef USE_FOG
     uniform vec4 m_FogColor;
-    varying float fogFactor;
+    uniform float m_FogDensity;
+    const float LOG2 = 1.442695;
 #endif
 
 void main(){
@@ -215,6 +216,8 @@ void main(){
     gl_FragColor.a = alpha;
     
     #ifdef USE_FOG
+        float dist = gl_FragCoord.z / gl_FragCoord.w;
+        float fogFactor = exp2(-m_FogDensity * m_FogDensity * dist *  dist * LOG2 );
         gl_FragColor = mix(m_FogColor, gl_FragColor, fogFactor);
     #endif
 }

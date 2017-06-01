@@ -120,7 +120,6 @@ MaterialDef Phong Lighting {
         Boolean UseFog
         Color Color : 1.0 0.0 0.0 1.0 // red
         Color FogColor : 1.0 1.0 1.0 1.0 // white
-        //Float FogDistance : 800.0
         Float FogDensity : 0.05
     }
 
@@ -166,7 +165,7 @@ MaterialDef Phong Lighting {
 
         LightMode MultiPass
 
-        VertexShader GLSL100 :   Materials/Fog/Lighting.vert
+        VertexShader GLSL100 :   Common/MatDefs/Light/Lighting.vert
         FragmentShader GLSL100 : Materials/Fog/Lighting.frag
 
         WorldParameters {
