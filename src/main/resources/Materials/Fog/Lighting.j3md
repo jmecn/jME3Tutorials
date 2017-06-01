@@ -166,8 +166,8 @@ MaterialDef Phong Lighting {
 
         LightMode MultiPass
 
-        VertexShader GLSL100 :   Common/MatDefs/Light/Lighting.vert
-        FragmentShader GLSL100 : Common/MatDefs/Light/Lighting.frag
+        VertexShader GLSL100 :   Materials/Fog/Lighting.vert
+        FragmentShader GLSL100 : Materials/Fog/Lighting.frag
 
         WorldParameters {
             WorldViewProjectionMatrix
@@ -198,6 +198,7 @@ MaterialDef Phong Lighting {
             SPHERE_MAP : EnvMapAsSphereMap  
             NUM_BONES : NumberOfBones                        
             INSTANCING : UseInstancing
+            USE_FOG : UseFog
         }
     }
 

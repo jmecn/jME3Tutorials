@@ -30,7 +30,6 @@ public class TestFogLightingShader extends SimpleApplication {
         flyCam.setMoveSpeed(10f);
         
         Material mat = new Material(assetManager, "Materials/Fog/Lighting.j3md");
-        mat.setColor("Color", ColorRGBA.Red);
         mat.setBoolean("UseFog", false);// disable the fog
         
         int size = rootNode.getChildren().size();
@@ -40,7 +39,6 @@ public class TestFogLightingShader extends SimpleApplication {
 
     private void createScene() {
         Material mat = new Material(assetManager, "Materials/Fog/Lighting.j3md");
-        mat.setColor("Color", ColorRGBA.Green);
         mat.setBoolean("UseFog", true);// Let the fog work
 
         Geometry geom = new Geometry("Floor", new Quad(40, 40));
