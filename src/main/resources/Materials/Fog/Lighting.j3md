@@ -118,7 +118,6 @@ MaterialDef Phong Lighting {
         
         // For fog
         Boolean UseFog
-        Color Color : 1.0 0.0 0.0 1.0 // red
         Color FogColor : 1.0 1.0 1.0 1.0 // white
         Float FogDensity : 0.05
     }
