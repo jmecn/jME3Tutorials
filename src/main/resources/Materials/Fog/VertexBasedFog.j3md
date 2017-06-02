@@ -1,0 +1,46 @@
+MaterialDef Vertex-based Fog {
+
+    MaterialParameters {
+        // Material colors
+        Color Ambient : 0.0 0.0 0.0 1.0
+        Color Diffuse : 1.0 1.0 1.0 1.0
+        Color Specular : 0.0 0.0 0.0 1.0
+        Float Shininess : 1
+        
+        // For fog
+        Boolean UseFrag // use FragmentShader
+        Color FogColor
+        Int FogMode : 0 // linear
+        // for linear
+        Vector2 FogRange : 10.0 100.0 // min, max
+        // for exp & exp2
+        Float FogDensity : 0.01
+        
+        // For instancing
+        Boolean UseInstancing
+    }
+
+    Technique {
+        LightMode MultiPass
+        
+        VertexShader GLSL100:   Materials/Fog/VertexBasedFog.vert
+        FragmentShader GLSL100: Materials/Fog/VertexBasedFog.frag
+
+        WorldParameters {
+            WorldMatrix
+            ViewMatrix
+            ProjectionMatrix
+            WorldViewMatrix
+            WorldViewProjectionMatrix
+            ViewProjectionMatrix
+            NormalMatrix
+            CameraPosition
+        }
+        
+        Defines {
+            USE_FOG : FogColor
+            USE_FRAG: UseFrag
+        }
+    }
+
+}
