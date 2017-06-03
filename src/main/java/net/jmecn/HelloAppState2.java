@@ -1,6 +1,10 @@
 package net.jmecn;
 
+import com.jme3.app.DebugKeysAppState;
+import com.jme3.app.FlyCamAppState;
 import com.jme3.app.SimpleApplication;
+import com.jme3.app.StatsAppState;
+import com.jme3.audio.AudioListenerState;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 
@@ -25,9 +29,10 @@ public class HelloAppState2 extends SimpleApplication {
      * 在构造方法中初始化AppState
      */
     public HelloAppState2() {
-        super(new LightAppState(), new VisualAppState(), new InputAppState());
+        super(new StatsAppState(), new FlyCamAppState(), new AudioListenerState(), new DebugKeysAppState(),
+                new LightAppState(), new VisualAppState(), new InputAppState());
     }
-    
+
     @Override
     public void simpleInitApp() {
         // 初始化摄像机
