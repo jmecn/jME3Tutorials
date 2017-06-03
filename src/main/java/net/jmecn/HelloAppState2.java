@@ -11,6 +11,7 @@ import com.jme3.math.Vector3f;
 import net.jmecn.logic.InputAppState;
 import net.jmecn.logic.LightAppState;
 import net.jmecn.logic.VisualAppState;
+import net.jmecn.state.AxisAppState;
 
 /**
  * SimpleApplication的最佳形式
@@ -30,7 +31,7 @@ public class HelloAppState2 extends SimpleApplication {
      */
     public HelloAppState2() {
         super(new StatsAppState(), new FlyCamAppState(), new AudioListenerState(), new DebugKeysAppState(),
-                new LightAppState(), new VisualAppState(), new InputAppState());
+               new AxisAppState(), new LightAppState(), new VisualAppState(), new InputAppState());
     }
 
     @Override
