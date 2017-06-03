@@ -1,6 +1,10 @@
-package net.jmecn.logic;
+package net.jmecn;
 
 import com.jme3.app.SimpleApplication;
+
+import net.jmecn.logic.InputAppState;
+import net.jmecn.logic.LightAppState;
+import net.jmecn.logic.VisualAppState;
 
 /**
  * 演示AppState的作用

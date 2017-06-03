@@ -1,4 +1,4 @@
-package net.jmecn.logic;
+package net.jmecn;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.light.DirectionalLight;
@@ -8,6 +8,8 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
+
+import net.jmecn.logic.RotateControl;
 
 /**
  * 演示Control的用法

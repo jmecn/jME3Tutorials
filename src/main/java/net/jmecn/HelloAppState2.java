@@ -1,8 +1,12 @@
-package net.jmecn.logic;
+package net.jmecn;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+
+import net.jmecn.logic.InputAppState;
+import net.jmecn.logic.LightAppState;
+import net.jmecn.logic.VisualAppState;
 
 /**
  * SimpleApplication的最佳形式
