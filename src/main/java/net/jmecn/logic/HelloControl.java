@@ -10,7 +10,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
 
 /**
- * 主循环
+ * 演示Control的用法
  * 
  * @author yanmaoyuan
  *

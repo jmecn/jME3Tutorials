@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
+import com.jme3.math.FastMath;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
@@ -20,7 +21,11 @@ public class RotateControl implements Control {
     private Spatial spatial;
 
     // 旋转速度：每秒180°
-    private float rotateSpeed = 1f;
+    private float rotateSpeed = FastMath.PI;
+
+    public RotateControl() {
+        this.rotateSpeed = FastMath.PI;
+    }
 
     public RotateControl(float rotateSpeed) {
         this.rotateSpeed = rotateSpeed;
