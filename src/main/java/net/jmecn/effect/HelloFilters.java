@@ -20,7 +20,6 @@ import com.jme3.post.filters.FogFilter;
 import com.jme3.post.filters.LightScatteringFilter;
 import com.jme3.post.ssao.SSAOFilter;
 import com.jme3.water.WaterFilter;
-import com.jme3.water.WaterFilter.AreaShape;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Checkbox;
 import com.simsilica.lemur.Command;
@@ -116,10 +115,10 @@ public class HelloFilters extends SimpleApplication {
 
         // 水
         water = new WaterFilter();
-        // 设置水面的返回。若不设置Center，则为无限范围。
+        // 设置水面的范围。若不设置，则为无限范围。
         //water.setCenter(new Vector3f(100, 0, -100));
-        water.setRadius(100);// 水面半径
-        water.setShapeType(AreaShape.Square);// 水面形状，可以是圆形，也可以是方形。
+        //water.setRadius(100);// 水面半径
+        //water.setShapeType(AreaShape.Square);// 水面形状，可以是圆形，也可以是方形。
         
         water.setDeepWaterColor(new ColorRGBA(0.8f, 1f, 0.8f, 1f));// 水下颜色
         water.setLightDirection(sunDir);// 阳光方向

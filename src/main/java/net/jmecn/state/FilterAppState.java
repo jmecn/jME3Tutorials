@@ -29,7 +29,6 @@ public class FilterAppState extends BaseAppState {
     protected void initialize(Application app) {
         this.assetManager = app.getAssetManager();
         this.viewPort = app.getViewPort();
-        app.getCamera();
         
         /**
          * 检查用户是否已经设置过FilterPostProcessor
