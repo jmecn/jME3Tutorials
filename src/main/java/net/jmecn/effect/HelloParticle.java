@@ -22,18 +22,25 @@ public class HelloParticle extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-
-        // 加载材质
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
-        mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/flame.png"));
         
         // 粒子发射器
         ParticleEmitter fire = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 30);
+        
+        // 粒子的生存周期
+        fire.setLowLife(1f);// 最短1秒
+        fire.setHighLife(3f);// 最长3秒
+        
+        /**
+         * 粒子的外观
+         */
+        // 加载材质
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
+        mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/flame.png"));
         fire.setMaterial(mat);
         
         // 设置2x2的动画
         fire.setImagesX(2);
-        fire.setImagesY(2); // 2x2 texture animation
+        fire.setImagesY(2);
         
         // 初始颜色，结束颜色
         fire.setEndColor(new ColorRGBA(1f, 0f, 0f, 1f)); // red
@@ -43,15 +50,15 @@ public class HelloParticle extends SimpleApplication {
         fire.setStartSize(1.5f);
         fire.setEndSize(0.1f);
         
+        /**
+         * 粒子的行为
+         */
+        // 初速度
         fire.getParticleInfluencer().setInitialVelocity(new Vector3f(0, 2, 0));
+        // 速度的变化
         fire.getParticleInfluencer().setVelocityVariation(0.3f);
-        
-        // 重力
+        // 不受重力影响
         fire.setGravity(0, 0, 0);
-        
-        fire.setLowLife(1f);
-        fire.setHighLife(3f);
-        
         
         rootNode.attachChild(fire);
     }
