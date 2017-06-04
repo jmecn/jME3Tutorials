@@ -1,20 +1,17 @@
 package net.jmecn.effect;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.math.ColorRGBA;
 import com.jme3.post.FilterPostProcessor;
-import com.jme3.post.filters.FogFilter;
 
-import net.jmecn.state.AxisAppState;
 import net.jmecn.state.CubeAppState;
 
 /**
- * 演示雾化滤镜(FogFilter)的作用
+ * 演示“灰度”滤镜的作用
  * 
  * @author yanmaoyuan
  *
  */
-public class HelloFog extends SimpleApplication {
+public class HelloGrayScale extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
@@ -24,14 +21,14 @@ public class HelloFog extends SimpleApplication {
         fpp.setNumSamples(4);
         viewPort.addProcessor(fpp);
 
-        FogFilter fogFilter = new FogFilter(ColorRGBA.White, 0.8f, 10f);
-        fpp.addFilter(fogFilter);
+        GrayScaleFilter grayScale = new GrayScaleFilter();
+        fpp.addFilter(grayScale);
 
         flyCam.setMoveSpeed(10f);
     }
 
     public static void main(String[] args) {
-        HelloFog app = new HelloFog();
+        HelloGrayScale app = new HelloGrayScale();
         app.start();
     }
 

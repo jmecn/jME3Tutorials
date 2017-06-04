@@ -1,0 +1,29 @@
+MaterialDef GrayScale {
+  
+    MaterialParameters {
+        Int NumSamples
+        Texture2D Texture
+    }
+  
+    Technique {
+        VertexShader GLSL150:   Common/MatDefs/Post/Post15.vert
+        FragmentShader GLSL150: Materials/GrayScale/GrayScale15.frag
+  
+        WorldParameters {
+            WorldViewProjectionMatrix
+        }
+ 
+        Defines {
+            RESOLVE_MS : NumSamples          
+        }
+    }
+  
+    Technique {
+        VertexShader GLSL100:   Common/MatDefs/Post/Post.vert
+        FragmentShader GLSL100: Materials/GrayScale/GrayScale.frag
+  
+        WorldParameters {
+            WorldViewProjectionMatrix
+        }
+    }
+}
