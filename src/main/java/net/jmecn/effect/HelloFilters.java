@@ -19,6 +19,8 @@ import com.jme3.post.filters.DepthOfFieldFilter;
 import com.jme3.post.filters.FogFilter;
 import com.jme3.post.filters.LightScatteringFilter;
 import com.jme3.post.ssao.SSAOFilter;
+import com.jme3.water.WaterFilter;
+import com.jme3.water.WaterFilter.AreaShape;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Checkbox;
 import com.simsilica.lemur.Command;
@@ -45,14 +47,15 @@ public class HelloFilters extends SimpleApplication {
     private List<Filter> filters = new ArrayList<Filter>();
     
     // 全部滤镜
-    private BloomFilter bloomFilter;
+    private BloomFilter bloom;
     private CartoonEdgeFilter cartoonEdge;
     private ColorOverlayFilter colorOverlay;
     private CrossHatchFilter crossHatch;
     private DepthOfFieldFilter depthOfField;
-    private FogFilter fogFilter;
+    private FogFilter fog;
     private LightScatteringFilter lightScattering;
-    private SSAOFilter ssaoFilter;
+    private SSAOFilter ssao;
+    private WaterFilter water;
     // 我们自定义的Filter
     private GrayScaleFilter grayScale;
 
@@ -80,11 +83,11 @@ public class HelloFilters extends SimpleApplication {
      */
     private void initFilters() {
         // 发光特效
-        bloomFilter = new BloomFilter(BloomFilter.GlowMode.Scene);
+        bloom = new BloomFilter(BloomFilter.GlowMode.SceneAndObjects);
 
         // 卡通边缘
         cartoonEdge = new CartoonEdgeFilter();
-        cartoonEdge.setEdgeColor(ColorRGBA.LightGray);
+        cartoonEdge.setEdgeColor(ColorRGBA.Black);
 
         // 纯色叠加
         colorOverlay = new ColorOverlayFilter(new ColorRGBA(1f, 0.8f, 0.8f, 1f));
@@ -99,7 +102,7 @@ public class HelloFilters extends SimpleApplication {
         depthOfField.setBlurScale(1.4f);
 
         // 雾化
-        fogFilter = new FogFilter(ColorRGBA.White, 1.5f, 200f);
+        fog = new FogFilter(ColorRGBA.White, 1.5f, 200f);
 
         // 灰度化
         grayScale = new GrayScaleFilter();
@@ -109,17 +112,30 @@ public class HelloFilters extends SimpleApplication {
         lightScattering = new LightScatteringFilter(sunDir.mult(-3000));
 
         // 屏幕空间环境光遮蔽
-        ssaoFilter = new SSAOFilter();
+        ssao = new SSAOFilter(7f, 14f, 0.4f, 0.6f);
 
-        filters.add(bloomFilter);
+        // 水
+        water = new WaterFilter();
+        // 设置水面的返回。若不设置Center，则为无限范围。
+        //water.setCenter(new Vector3f(100, 0, -100));
+        water.setRadius(100);// 水面半径
+        water.setShapeType(AreaShape.Square);// 水面形状，可以是圆形，也可以是方形。
+        
+        water.setDeepWaterColor(new ColorRGBA(0.8f, 1f, 0.8f, 1f));// 水下颜色
+        water.setLightDirection(sunDir);// 阳光方向
+        water.setWaterHeight(6f);// 水面高度
+        water.setUnderWaterFogDistance(80);// 水下视距
+        
+        filters.add(bloom);
         filters.add(cartoonEdge);
         filters.add(colorOverlay);
         filters.add(crossHatch);
         filters.add(depthOfField);
-        filters.add(fogFilter);
+        filters.add(fog);
         filters.add(grayScale);
         filters.add(lightScattering);
-        filters.add(ssaoFilter);
+        filters.add(ssao);
+        filters.add(water);
     }
 
     private void initGui() {

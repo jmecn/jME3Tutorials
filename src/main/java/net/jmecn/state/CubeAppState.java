@@ -56,9 +56,9 @@ public class CubeAppState extends BaseAppState {
         float side = 3f;
         for (int y = 0; y < 9; y++) {
             for (int x = 0; x < 9; x++) {
-                geom = new Geometry("Cube", new Box(side, side, side));
+                geom = new Geometry("Cube", new Box(side, side*2, side));
                 geom.setMaterial(getMaterial(new ColorRGBA(1 - x / 8f, y / 8f, 1f, 1f)));
-                geom.move((x + 1) * scalar, side, -(y + 1) * scalar);
+                geom.move((x + 1) * scalar, side*2, -(y + 1) * scalar);
                 rootNode.attachChild(geom);
             }
         }
