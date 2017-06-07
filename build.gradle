@@ -34,6 +34,9 @@ dependencies {
     // 支持blend模型文件
     compile "$jme3.g:jme3-blender:$jme3.v"
     compile "$jme3.g:jme3-plugins:$jme3.v"
+    // 支持bullet物理引擎
+    compile "$jme3.g:jme3-bullet:$jme3.v"
+    compile "$jme3.g:jme3-bullet-native:$jme3.v"
 
     /**
      * Lemur用于制作jME3的GUI
