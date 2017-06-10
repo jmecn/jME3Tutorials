@@ -26,7 +26,8 @@ dependencies {
     // jME3桌面开发核心组件
     compile "$jme3.g:jme3-core:$jme3.v"
     compile "$jme3.g:jme3-desktop:$jme3.v"
-    compile "$jme3.g:jme3-lwjgl:$jme3.v"
+    compile "$jme3.g:jme3-lwjgl3:$jme3.v"
+    compile "$jme3.g:jme3-jogl:$jme3.v"
     // 水面、粒子特效等
     compile "$jme3.g:jme3-effects:$jme3.v"
     // 支持ogg音频格式
@@ -34,10 +35,13 @@ dependencies {
     // 支持blend模型文件
     compile "$jme3.g:jme3-blender:$jme3.v"
     compile "$jme3.g:jme3-plugins:$jme3.v"
-    // 支持bullet物理引擎
+    // 支持bullet 3D物理引擎
     compile "$jme3.g:jme3-bullet:$jme3.v"
     compile "$jme3.g:jme3-bullet-native:$jme3.v"
 
+    // 支持dyn4j 2D物理引擎
+    compile 'org.dyn4j:dyn4j:3.2.3'
+    
     /**
      * Lemur用于制作jME3的GUI
      */
