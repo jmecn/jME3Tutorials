@@ -62,6 +62,7 @@ public class HelloBoundingSphere extends SimpleApplication {
         // 用于显示包围球
         mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.Magenta);
+        mat.getAdditionalRenderState().setLineWidth(2);
         mat.getAdditionalRenderState().setWireframe(true);
         debug = new Geometry("debug", new WireSphere(1));
         debug.setMaterial(mat);

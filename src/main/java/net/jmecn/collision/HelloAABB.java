@@ -56,6 +56,7 @@ public class HelloAABB extends SimpleApplication {
         // 用于显示包围盒
         mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.Magenta);
+        mat.getAdditionalRenderState().setLineWidth(2);
         debug = new Geometry("debug", new WireBox(1, 1, 1));
         debug.setMaterial(mat);
 
