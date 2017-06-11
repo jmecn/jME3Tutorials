@@ -221,7 +221,7 @@ public class HelloPicking extends SimpleApplication implements ActionListener {
          */
         if (results.size() > 0) {
 
-            // 从进到远，打印出射线途径的所有交点。
+            // 从近到远，打印出射线途径的所有交点。
             for (int i = 0; i < results.size(); i++) {
                 CollisionResult result = results.getCollision(i);
 
