@@ -42,8 +42,6 @@ public class TestDyn4j extends SimpleApplication {
 		floor();
 		
 		createCircle(0.5f);
-		createCircle(0.5f);
-		createCircle(0.5f);
 		
 		rectangle();
 	}
