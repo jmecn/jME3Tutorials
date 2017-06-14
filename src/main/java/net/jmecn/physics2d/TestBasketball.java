@@ -9,13 +9,16 @@ import org.dyn4j.geometry.Rectangle;
 import org.dyn4j.geometry.Vector2;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.font.BitmapText;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -61,18 +64,32 @@ public class TestBasketball extends SimpleApplication implements ActionListener 
     // 场景整体向右移动一点点距离
     private float offsetX;
     
-    // 箭头最大长度
-    private final static float MAX_ARROW_LENGTH = 2;
-    // 力量系数
-    private final static float FORCE_FACTOR = 200;// 系数
-    
     /**
      * Dyn4j的物理世界
      */
     protected World world;
-    
-    private Geometry arrow;
+    private Node debugNode;
 
+    /**
+     * 当玩家准备投篮时，屏幕上会出现一个箭头，用来显示投篮方向和力度大小。
+     */
+    private final static float MAX_ARROW_LENGTH = 2;
+    private Geometry arrow;
+    private BitmapText text;
+    
+    /**
+     * 投篮的力量参数。
+     * 根据玩家在屏幕上按下和释放的位置，计算出投篮的方向和力量大小。
+     * 
+     */
+    private final static float MAX_SHOOT_FORCE = 500;
+    private boolean drag = false;
+    private Vector2f start = new Vector2f();
+    private Vector2f stop = new Vector2f();
+    private Vector2f force = new Vector2f();
+    // 记录光标的位置。当光标坐标没有改变时，就不要再次计算力量向量。
+    private Vector2f lastCursorPos = new Vector2f();
+    
     @Override
     public void simpleInitApp() {
         world = new World();
@@ -89,6 +106,30 @@ public class TestBasketball extends SimpleApplication implements ActionListener 
         inputManager.addListener(this, CLICK);
     }
 
+    @Override
+    public void simpleUpdate(float tpf) {
+        world.update(tpf);
+        
+        if (drag) {
+            updateForce();
+        }
+    }
+    
+
+    @Override
+    public void onAction(String name, boolean isPressed, float tpf) {
+        if (CLICK.equals(name)) {
+            drag = isPressed;
+            if (isPressed) {
+            	// 初始化向量
+            	initForce();
+            } else {
+            	// 投篮
+            	shootBall();
+            }
+        }
+    }
+    
     /**
      * 重设摄像机
      */
@@ -133,40 +174,43 @@ public class TestBasketball extends SimpleApplication implements ActionListener 
         
         arrow = new Geometry("Arrow", mesh);
         arrow.setMaterial(mat);
+        
+        text = guiFont.createLabel("0, 0N");
+        text.setLocalScale(1/factor);
     }
+    
     /**
      * 篮球场
      */
     private void buildPlayGround() {
-        buildFloor();
+    	debugNode = new Node("debugNode");
+    	rootNode.attachChild(debugNode);
+    	
+        buildGround();
         buildBoard();
         buildBasketLeft();
         buildBasketRight();
-        
-        Node node = createVisual(worldWidth, worldHeight, "Textures/Dyn4j/Samples/Bg.png");
-        node.move(worldWidth * 0.5f, worldHeight * 0.5f, -1);
-        rootNode.attachChild(node);
     }
 
     /**
      * 地板
      */
-    private void buildFloor() {
+    private void buildGround() {
         // 篮球场，三分线距离6.75m，厚0.1m
         float width = 7.0f;
         float height = 0.1f;
-        Rectangle floorRect = new Rectangle(width, height);
+        Rectangle rect = new Rectangle(width, height);
         Body body = new Body();
-        body.addFixture(new BodyFixture(floorRect));
+        body.addFixture(new BodyFixture(rect));
         body.translate(offsetX + width / 2, height / 2);
         body.setMass(MassType.INFINITE);
 
         this.world.addBody(body);
 
         // create spatial
-        //Node node = createVisual(width, height, null);
-        //node.addControl(new BodyControl(body));
-        //rootNode.attachChild(node);
+        Node node = createVisual(width, height, null);
+        node.addControl(new BodyControl(body));
+        debugNode.attachChild(node);
     }
 
     /**
@@ -186,9 +230,9 @@ public class TestBasketball extends SimpleApplication implements ActionListener 
         this.world.addBody(body);
 
         // create spatial
-        //Node node = createVisual(width, height, null);
-        //node.addControl(new BodyControl(body));
-        //rootNode.attachChild(node);
+        Node node = createVisual(width, height, null);
+        node.addControl(new BodyControl(body));
+        debugNode.attachChild(node);
     }
 
     /**
@@ -206,9 +250,9 @@ public class TestBasketball extends SimpleApplication implements ActionListener 
         this.world.addBody(body);
 
         // create spatial
-        //Node node = createVisual(radius * 2, radius * 2, null);
-        //node.addControl(new BodyControl(body));
-        //rootNode.attachChild(node);
+        Node node = createVisual(radius * 2, radius * 2, null);
+        node.addControl(new BodyControl(body));
+        debugNode.attachChild(node);
     }
 
     /**
@@ -226,9 +270,9 @@ public class TestBasketball extends SimpleApplication implements ActionListener 
         this.world.addBody(body);
 
         // create spatial
-        //Node node = createVisual(radius * 2, radius * 2, null);
-        //node.addControl(new BodyControl(body));
-        //rootNode.attachChild(node);
+        Node node = createVisual(radius * 2, radius * 2, null);
+        node.addControl(new BodyControl(body));
+        debugNode.attachChild(node);
     }
 
     /**
@@ -264,7 +308,7 @@ public class TestBasketball extends SimpleApplication implements ActionListener 
         mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
 
         if (tex == null) {
-            mat.setColor("Color", ColorRGBA.randomColor());
+            mat.setColor("Color", new ColorRGBA(0.1f, 0.2f, 0.3f, 1f));
         } else {
             try {
                 Texture texture = assetManager.loadTexture(tex);
@@ -286,101 +330,133 @@ public class TestBasketball extends SimpleApplication implements ActionListener 
         return node;
     }
 
-    @Override
-    public void onAction(String name, boolean isPressed, float tpf) {
+    /**
+     * 根据光标位置，初始化投篮力量向量。
+     */
+    private void initForce() {
+    	
+    	Vector2f pos = inputManager.getCursorPosition();
+    	lastCursorPos.set(pos);
+    	
+        float x = (pos.x) / factor + cam.getLocation().x + cam.getFrustumLeft();
+        float y = (pos.y) / factor + cam.getLocation().y + cam.getFrustumBottom();
+        
+    	start.set(x, y);
+        stop.set(x, y);
+        force.set(0, 0);
+        
+        // 把箭头添加到场景图中，并初始化箭头的姿势。
+        arrow.setLocalTranslation(x, y, 0);
+        arrow.setLocalScale(0);
+        arrow.setLocalRotation(Quaternion.IDENTITY);
+        
+        rootNode.attachChild(arrow);
+        
+        text.setText("Deg=0, F=0N");
+        text.setLocalTranslation(x, y, 1);
+        rootNode.attachChild(text);
+    }
+    
+    /**
+     * 投篮
+     */
+    private void shootBall() {
+        
+        force.multLocal(MAX_SHOOT_FORCE / MAX_ARROW_LENGTH);
+        
+        // physics body
+        Body body = makeBall(start.x, start.y);
+        body.applyForce(new Vector2(force.x, force.y));
+        world.addBody(body);
 
-        if (CLICK.equals(name)) {
-
-            Vector2f pos = inputManager.getCursorPosition();
-            float x = (pos.x) / factor + cam.getLocation().x + cam.getFrustumLeft();
-            float y = (pos.y) / factor + cam.getLocation().y + cam.getFrustumBottom();
-
-            draging = isPressed;
-            if (isPressed) {
-                start.set(x, y);
-                stop.set(x, y);
-                force.set(0, 0);
-                
-                arrow.setLocalTranslation(x, y, 0);
-                rootNode.attachChild(arrow);
-            } else {
-                arrow.removeFromParent();
-                
-                updateVector();
-                force.multLocal(FORCE_FACTOR);
-                
-                Body body = makeBall(start.x, start.y);
-                // test adding some force
-                body.applyForce(new Vector2(force.x, force.y));
-
-                this.world.addBody(body);
-
-                // create a sphere
-                Node node = createVisual(0.246f, 0.246f, "Textures/Dyn4j/Samples/Basketball.png");
-                node.addControl(new BodyControl(body));
-                rootNode.attachChild(node);
-            }
+        // create a ball
+        Node node = createVisual(0.246f, 0.246f, "Textures/Dyn4j/Samples/Basketball.png");
+        node.addControl(new BodyControl(body));
+        rootNode.attachChild(node);
+        
+        arrow.removeFromParent();
+        text.removeFromParent();
+    }
+    
+    /**
+     * 更新投篮的力量
+     */
+    private void updateForce() {
+        Vector2f pos = inputManager.getCursorPosition();
+        
+        // 不需要计算
+        if (lastCursorPos.equals(pos)) {
+        	return;
+        } else {
+        	lastCursorPos.set(pos);
         }
 
-    }
-
-    /**
-     * 更新投篮的方向向量
-     */
-    private void updateVector() {
-        Vector2f pos = inputManager.getCursorPosition();
+        // 计算终点坐标，并计算投篮的方向向量。
         float x = (pos.x) / factor + cam.getLocation().x + cam.getFrustumLeft();
         float y = (pos.y) / factor + cam.getLocation().y + cam.getFrustumBottom();
         stop.set(x, y);
         
+        // Force = Stop - Start
         stop.subtract(start, force);
+        
+        // 使用jme3的全局临时变量，避免分配新的对象，造成内存泄漏。
+        TempVars temp = TempVars.get();
+        // 计算方向
+        Vector2f dir = temp.vect2d.set(force);
+        dir.normalizeLocal();// 单位化
+        
+        /**
+         * 限制投篮的力量，不让力度过大。
+         */
         float length = force.length();
+        if (length > MAX_ARROW_LENGTH) {
+            length = MAX_ARROW_LENGTH;
+            
+            // 修正终点坐标
+            dir.multLocal(length);
+            force.set(dir);
+            start.add(force, stop);
+        }
         
         /**
          * 计算箭头的旋转
          */
-        force.normalizeLocal();
-        // 使用jme3的全局临时变量，避免分配新的对象，造成内存泄漏。
-        TempVars temp = TempVars.get();
-        
+        // 生成旋转矩阵
         Matrix3f rotation = temp.tempMat3;
-        Vector3f uAxis = temp.vect1.set(force.x, force.y, 0);
-        Vector3f vAxis = temp.vect2.set(-force.y, force.x, 0);
-        Vector3f wAxis = temp.vect3.set(0, 0, 1);
+        Vector3f uAxis = temp.vect1.set(dir.x, dir.y, 0);
+        Vector3f vAxis = temp.vect2.set(-dir.y, dir.x, 0);
+        Vector3f wAxis = temp.vect3.set(Vector3f.UNIT_Z);
         rotation.fromAxes(uAxis, vAxis, wAxis);
         
-        arrow.setLocalRotation(rotation);// 旋转
+        arrow.setLocalRotation(rotation);// 旋转剪头指向
         
-        // 释放全局变量
-        temp.release();
+        /**
+         * 根据投篮的力量，改变箭头的颜色。
+         */
+        ColorRGBA color = temp.color;
+        color.interpolateLocal(ColorRGBA.Green, ColorRGBA.Red, length/MAX_ARROW_LENGTH);
+        arrow.getMaterial().setColor("Color", color);
         
-        // 不让力度过大
-        if (length > MAX_ARROW_LENGTH) {
-            length = MAX_ARROW_LENGTH;
-            // 修正终点坐标
-            force.multLocal(length);
-            start.add(force, stop);
-        }
-        
+        /**
+         * 改变箭头的长度
+         */
         arrow.setLocalScale(length);
+        
+        /**
+         * 改变指示器文字
+         */
+        Vector2f UNIT_X = temp.vect2d2.set(1, 0);
+        float degree = -dir.angleBetween(UNIT_X) / FastMath.DEG_TO_RAD;
+        float power = length * MAX_SHOOT_FORCE / MAX_ARROW_LENGTH;
+        text.setText(String.format("Deg=%.1f, F=%.1fN", degree, power));
+        
+        // 释放全局临时变量
+        temp.release();
     }
     
-    private boolean draging = false;
-    private Vector2f start = new Vector2f();
-    private Vector2f stop = new Vector2f();
-    private Vector2f force = new Vector2f();
-
-    @Override
-    public void simpleUpdate(float tpf) {
-        this.world.update(tpf);
-        
-        if (draging) {
-            updateVector();
-        }
-    }
-
     public static void main(String[] args) {
         TestBasketball app = new TestBasketball();
+        app.setPauseOnLostFocus(false);
         app.start();
     }
 
