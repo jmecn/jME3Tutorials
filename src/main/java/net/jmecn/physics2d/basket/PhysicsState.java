@@ -114,12 +114,19 @@ public class PhysicsState extends BaseAppState {
 		body.addFixture(new BodyFixture(circle));
 		body.translate(offsetX + radius + 6.4, radius + 3.05);
 		body.setMass(MassType.INFINITE);
-
 		addBody(body);
+
+		Body wire1 = new Body();
+		Rectangle rect1 = new Rectangle(0.03, 0.4);
+		wire1.addFixture(new BodyFixture(rect1));
+		wire1.setMass(MassType.INFINITE);
+		wire1.rotate(Math.toRadians(10));
+		wire1.translate(offsetX + radius + 6.43, radius + 2.85);
+		addBody(wire1);
 	}
 
 	/**
-	 * 篮框右边边
+	 * 篮框右边
 	 */
 	private void buildBasketRight() {
 		float radius = 0.015f;
@@ -131,6 +138,14 @@ public class PhysicsState extends BaseAppState {
 		body.setMass(MassType.INFINITE);
 
 		addBody(body);
+		
+		Body wire1 = new Body();
+        Rectangle rect1 = new Rectangle(0.03, 0.4);
+        wire1.addFixture(new BodyFixture(rect1));
+        wire1.setMass(MassType.INFINITE);
+        wire1.rotate(Math.toRadians(-10));
+        wire1.translate(offsetX + radius + 6.82, radius + 2.85);
+        addBody(wire1);
 
 	}
 
