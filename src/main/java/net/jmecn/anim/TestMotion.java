@@ -18,131 +18,132 @@ import com.jme3.scene.Spatial;
 
 /**
  * 演示运动路径
+ * 
  * @author yanmaoyuan
  *
  */
 public class TestMotion extends SimpleApplication {
 
-	public static void main(String[] args) {
-		// 启动程序
-		TestMotion app = new TestMotion();
-		app.start();
-	}
-	
-	/**
-	 * 缩放系数
-	 */
-	final static float SCALE_FACTOR = 5f;
-	
+    public static void main(String[] args) {
+        // 启动程序
+        TestMotion app = new TestMotion();
+        app.start();
+    }
+
+    /**
+     * 缩放系数
+     */
+    final static float SCALE_FACTOR = 5f;
+
     private Spatial player;// 玩家
     private Spatial stage;// 舞台
-    
+
     private boolean active = true;
     private boolean playing = false;
-    
+
     private MotionPath motionPath;
     private MotionEvent motionControl;
-    
-	@Override
-	public void simpleInitApp() {
 
-		flyCam.setMoveSpeed(10);
+    @Override
+    public void simpleInitApp() {
 
-		initLights();
-		
-		initInputs();
-		
-		initMotionPath();
-		
-		stage = assetManager.loadModel("Models/Stage/Stage.j3o");
-		stage.scale(SCALE_FACTOR);
-		rootNode.attachChild(stage);
-		
-		player = assetManager.loadModel("Models/Jaime/Jaime.j3o");
-		rootNode.attachChild(player);
-		
-		AnimControl ac = player.getControl(AnimControl.class);
-		AnimChannel channel = ac.createChannel();
-		channel.setAnim("Run");
-		channel.setSpeed(2f);
-		
-		motionControl = new MotionEvent(player, motionPath);
-        
-		// 在行进中，注视某个位置
-//		Vector3f position = new Vector3f(0, 0, 0);
-//		motionControl.setLookAt(position, Vector3f.UNIT_Y);
-//		motionControl.setDirectionType(Direction.LookAt);
-		
-		// 在行进中，面朝固定方向
-//		Quaternion rotation = new Quaternion().fromAngleNormalAxis(-FastMath.HALF_PI, Vector3f.UNIT_Y);
-//		motionControl.setRotation(rotation);
-//		motionControl.setDirectionType(Direction.Rotation);
+        flyCam.setMoveSpeed(10);
 
-		// 在行进中，面朝前进方向
-		motionControl.setDirectionType(Direction.Path);
-		
-		// 设置走完全程所需的时间（单位：秒）。
-		motionControl.setInitialDuration(10f);
-	}
+        initLights();
 
-	/**
-	 * 初始化光源
-	 */
-	private void initLights() {
-		AmbientLight ambient = new AmbientLight(new ColorRGBA(0.4f, 0.4f, 0.4f, 1f));
-		
-		DirectionalLight sun = new DirectionalLight();
-		sun.setDirection(new Vector3f(0.6486864f, -0.72061276f, 0.24479222f));
-		sun.setColor(new ColorRGBA(0.8f, 0.8f, 0.8f, 1f));
-		
-		rootNode.addLight(ambient);
-		rootNode.addLight(sun);
-	}
-	
-	/**
-	 * 路径点数据
-	 */
-	final static float[] WayPoints = {
-		1.3660254f, -1f, 0.5f,// 0
-		0.8660254f, -1f, 0.5f,// 1
-		-0.8660254f, 0f, 0.5f,// 2
-		-1.3660254f, 0f, 0.5f,// 3
-		-1.3660254f, 0f, -0.5f,// 4
-		-0.8660254f, 0f, -0.5f,// 5
-		0.8660254f, 1f, -0.5f,// 6
-		1.3660254f, 1f, -0.5f// 7
-	};
-	
-	/**
-	 * 建造路径点
-	 */
-	private void initMotionPath() {
-		
-		motionPath = new MotionPath();
+        initInputs();
 
-		// 路径点个数
-		int count = WayPoints.length / 3;
-		
-		for(int i = 0; i < count; i++) {
-			// 按比例放大顶点坐标
-			int n = i * 3;
-			float x = SCALE_FACTOR * WayPoints[n];
-			float y = SCALE_FACTOR * WayPoints[n + 1];
-			float z = SCALE_FACTOR * WayPoints[n + 2];
-			
-			motionPath.addWayPoint(new Vector3f(x, y, z));
-		}
-		
-		motionPath.setPathSplineType(SplineType.Linear);
-		
-		motionPath.enableDebugShape(assetManager, rootNode);
-	}
-	
-	/**
-	 * 初始化输入
-	 */
-	private void initInputs() {
-		inputManager.addMapping("display_hidePath", new KeyTrigger(KeyInput.KEY_P));
+        initMotionPath();
+
+        stage = assetManager.loadModel("Models/Stage/Stage.j3o");
+        stage.scale(SCALE_FACTOR);
+        rootNode.attachChild(stage);
+
+        player = assetManager.loadModel("Models/Jaime/Jaime.j3o");
+        rootNode.attachChild(player);
+
+        AnimControl ac = player.getControl(AnimControl.class);
+        AnimChannel channel = ac.createChannel();
+        channel.setAnim("Run");
+        channel.setSpeed(2f);
+
+        motionControl = new MotionEvent(player, motionPath);
+
+        // 在行进中，注视某个位置
+        // Vector3f position = new Vector3f(0, 0, 0);
+        // motionControl.setLookAt(position, Vector3f.UNIT_Y);
+        // motionControl.setDirectionType(Direction.LookAt);
+
+        // 在行进中，面朝固定方向
+        // Quaternion rotation = new
+        // Quaternion().fromAngleNormalAxis(-FastMath.HALF_PI, Vector3f.UNIT_Y);
+        // motionControl.setRotation(rotation);
+        // motionControl.setDirectionType(Direction.Rotation);
+
+        // 在行进中，面朝前进方向
+        motionControl.setDirectionType(Direction.Path);
+
+        // 设置走完全程所需的时间（单位：秒）。
+        motionControl.setInitialDuration(10f);
+    }
+
+    /**
+     * 初始化光源
+     */
+    private void initLights() {
+        AmbientLight ambient = new AmbientLight(new ColorRGBA(0.4f, 0.4f, 0.4f, 1f));
+
+        DirectionalLight sun = new DirectionalLight();
+        sun.setDirection(new Vector3f(0.6486864f, -0.72061276f, 0.24479222f));
+        sun.setColor(new ColorRGBA(0.8f, 0.8f, 0.8f, 1f));
+
+        rootNode.addLight(ambient);
+        rootNode.addLight(sun);
+    }
+
+    /**
+     * 路径点数据
+     */
+    final static float[] WayPoints = { 1.3660254f, -1f, 0.5f, // 0
+            0.8660254f, -1f, 0.5f, // 1
+            -0.8660254f, 0f, 0.5f, // 2
+            -1.3660254f, 0f, 0.5f, // 3
+            -1.3660254f, 0f, -0.5f, // 4
+            -0.8660254f, 0f, -0.5f, // 5
+            0.8660254f, 1f, -0.5f, // 6
+            1.3660254f, 1f, -0.5f// 7
+    };
+
+    /**
+     * 建造路径点
+     */
+    private void initMotionPath() {
+
+        motionPath = new MotionPath();
+
+        // 路径点个数
+        int count = WayPoints.length / 3;
+
+        for (int i = 0; i < count; i++) {
+            // 按比例放大顶点坐标
+            int n = i * 3;
+            float x = SCALE_FACTOR * WayPoints[n];
+            float y = SCALE_FACTOR * WayPoints[n + 1];
+            float z = SCALE_FACTOR * WayPoints[n + 2];
+
+            motionPath.addWayPoint(new Vector3f(x, y, z));
+        }
+
+        motionPath.setPathSplineType(SplineType.Linear);
+
+        motionPath.enableDebugShape(assetManager, rootNode);
+    }
+
+    /**
+     * 初始化输入
+     */
+    private void initInputs() {
+        inputManager.addMapping("display_hidePath", new KeyTrigger(KeyInput.KEY_P));
         inputManager.addMapping("SwitchPathInterpolation", new KeyTrigger(KeyInput.KEY_I));
         inputManager.addMapping("tensionUp", new KeyTrigger(KeyInput.KEY_U));
         inputManager.addMapping("tensionDown", new KeyTrigger(KeyInput.KEY_J));
@@ -159,7 +160,7 @@ public class TestMotion extends SimpleApplication {
                         motionPath.enableDebugShape(assetManager, rootNode);
                     }
                 }
-                
+
                 if (name.equals("play_stop") && keyPressed) {
                     if (playing) {
                         playing = false;
@@ -171,7 +172,7 @@ public class TestMotion extends SimpleApplication {
                 }
 
                 if (name.equals("SwitchPathInterpolation") && keyPressed) {
-                    if (motionPath.getPathSplineType() == SplineType.CatmullRom){
+                    if (motionPath.getPathSplineType() == SplineType.CatmullRom) {
                         motionPath.setPathSplineType(SplineType.Linear);
                     } else {
                         motionPath.setPathSplineType(SplineType.CatmullRom);
@@ -187,11 +188,11 @@ public class TestMotion extends SimpleApplication {
                     System.err.println("Tension : " + motionPath.getCurveTension());
                 }
 
-
             }
         };
 
-        inputManager.addListener(acl, "display_hidePath", "play_stop", "SwitchPathInterpolation", "tensionUp", "tensionDown");
-	}
+        inputManager.addListener(acl, "display_hidePath", "play_stop", "SwitchPathInterpolation", "tensionUp",
+                "tensionDown");
+    }
 
 }
