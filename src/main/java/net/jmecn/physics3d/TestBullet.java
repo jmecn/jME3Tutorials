@@ -33,6 +33,7 @@ public class TestBullet extends SimpleApplication {
 		RigidBodyControl rigidBodyFloor = new RigidBodyControl(0);
 		Vector3f halfExtents = new Vector3f(14f, 0.05f, 7.5f);
 		rigidBodyFloor.setCollisionShape(new BoxCollisionShape(halfExtents));
+		rigidBodyFloor.setRestitution(0.8f);// 弹性系数
 		// 将刚体添加到物理空间中
 		physicsSpace.add(rigidBodyFloor);
 		
@@ -43,6 +44,7 @@ public class TestBullet extends SimpleApplication {
 		rigidBodyBall.setPhysicsLocation(new Vector3f(-10, 1, 0));// 在物理世界中的坐标
 		rigidBodyBall.setLinearVelocity(new Vector3f(8, 5, 0));// 线速度
 		rigidBodyBall.setFriction(0.2f);// 摩擦系数
+		rigidBodyBall.setRestitution(0.8f);// 弹性系数
 		physicsSpace.add(rigidBodyBall);
 		
 		// 创建挡板的刚体对象，质量为0.2kg，尺寸为横宽1.8m * 竖高1.05m * 厚0.03m。
