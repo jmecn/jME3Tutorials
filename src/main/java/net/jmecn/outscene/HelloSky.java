@@ -54,7 +54,7 @@ public class HelloSky extends SimpleApplication implements ActionListener {
         sky5 = SkyFactory.createSky(assetManager, "Textures/Sky/SkyEquirectMap.jpg", SkyFactory.EnvMapType.EquirectMap);
 
         // 地球
-        sky6 = SkyFactory.createSky(assetManager, "Textures/Sky/earth_equirect_map.jpg", SkyFactory.EnvMapType.EquirectMap);
+        sky6 = SkyFactory.createSky(assetManager, "Textures/Sky/earth.jpg", SkyFactory.EnvMapType.EquirectMap);
 
         // 天球，林间小径
         sky7 = SkyFactory.createSky(assetManager, "Textures/Sky/Path.hdr", SkyFactory.EnvMapType.EquirectMap);
