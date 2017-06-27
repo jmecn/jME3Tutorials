@@ -1,0 +1,17 @@
+Material default map of EarchSculptor : Common/MatDefs/Terrain/TerrainLighting.j3md {
+    MaterialParameters {
+        useTriPlanarMapping : false
+        
+        AlphaMap     : Scenes/Maps/DefaultMap/default_d.png
+        
+        DiffuseMap   : Repeat Scenes/Maps/DefaultMap/Textures/grayRock.png
+        DiffuseMap_1 : Repeat Scenes/Maps/DefaultMap/Textures/hardDirt.png
+        DiffuseMap_2 : Repeat Scenes/Maps/DefaultMap/Textures/bigRockFace.png
+        DiffuseMap_3 : Repeat Scenes/Maps/DefaultMap/Textures/shortGrass.png
+        
+        DiffuseMap_0_scale : 27.365
+        DiffuseMap_1_scale : 20.0
+        DiffuseMap_2_scale : 32.34
+        DiffuseMap_3_scale : 22.39
+    }
+}

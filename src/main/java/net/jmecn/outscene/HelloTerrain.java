@@ -80,7 +80,7 @@ public class HelloTerrain extends SimpleApplication {
     private void initTerrain() {
 
         // 加载地形的高度图
-        Texture heightMapImage = assetManager.loadTexture("Scenes/EarthSculptor/Maps/DefaultMap/default.png");
+        Texture heightMapImage = assetManager.loadTexture("Scenes/Maps/DefaultMap/default.png");
 
         // 根据图像内容，生成高度图
         ImageBasedHeightMap heightmap = new ImageBasedHeightMap(heightMapImage.getImage(), 1f);
@@ -102,7 +102,7 @@ public class HelloTerrain extends SimpleApplication {
         control.setLodCalculator(new DistanceLodCalculator (65, 2f));
         terrain.addControl(control);
 
-        terrain.setMaterial(assetManager.loadMaterial("Scenes/EarthSculptor/Material/DefaultMap.j3m"));
+        terrain.setMaterial(assetManager.loadMaterial("Scenes/Maps/DefaultMap/default.j3m"));
 
         terrain.setLocalTranslation(0, -90, 0);
         terrain.setLocalScale(1, 1, 1);
