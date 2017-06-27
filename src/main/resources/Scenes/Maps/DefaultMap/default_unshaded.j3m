@@ -1,0 +1,8 @@
+Material unshaded material : Common/MatDefs/Misc/Unshaded.j3md {
+
+    MaterialParameters {
+        ColorMap : Scenes/Maps/DefaultMap/default_c.png
+        LightMap : Flip Scenes/Maps/DefaultMap/default_l.png
+    }
+
+}

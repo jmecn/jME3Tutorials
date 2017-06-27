@@ -1,0 +1,17 @@
+Material height based : Common/MatDefs/Terrain/HeightBasedTerrain.j3md {
+    MaterialParameters {
+        
+        terrainSize : 257
+        
+        //slopeColorMap : Repeat Scenes/Maps/DefaultMap/Textures/bigRockFace.png
+        //slopeTileFactor : 10
+        
+        region1ColorMap : Repeat Scenes/Maps/DefaultMap/Textures/hardDirt.png
+        region2ColorMap : Repeat Scenes/Maps/DefaultMap/Textures/shortGrass.png
+        region3ColorMap : Repeat Scenes/Maps/DefaultMap/Textures/grayRock.png
+        
+        region1 : 0.0 60.0 20.0
+        region2 : 60.0 120.0 20.0
+        region3 : 120.0 255.0 20.0
+    }
+}
