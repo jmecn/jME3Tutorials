@@ -35,6 +35,8 @@ dependencies {
     // 支持blend模型文件
     compile "$jme3.g:jme3-blender:$jme3.v"
     compile "$jme3.g:jme3-plugins:$jme3.v"
+    // 支持高度图地形
+    compile "$jme3.g:jme3-terrain:$jme3.v"
     // 支持bullet 3D物理引擎
     compile "$jme3.g:jme3-bullet:$jme3.v"
     compile "$jme3.g:jme3-bullet-native:$jme3.v"
