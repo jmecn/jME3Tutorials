@@ -39,6 +39,7 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Vector2f;
 import com.jme3.texture.Image;
 import com.jme3.texture.Image.Format;
+import com.jme3.texture.image.ColorSpace;
 import com.jme3.texture.image.ImageRaster;
 import com.jme3.util.BufferUtils;
 import java.nio.ByteBuffer;
@@ -266,7 +267,7 @@ public class ImagePainter {
      */
     public ImagePainter(Format format, int width, int height) {
         ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * format.getBitsPerPixel() / 8);
-        this.image = new Image(format, width, height, buffer);
+        this.image = new Image(format, width, height, buffer, ColorSpace.Linear);
         this.imageRaster = ImageRaster.create(image, 0);
     }
 

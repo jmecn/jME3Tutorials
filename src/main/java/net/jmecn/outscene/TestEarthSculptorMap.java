@@ -34,10 +34,10 @@ public class TestEarthSculptorMap extends SimpleApplication {
 
     private AssetInfo assetInfo;
 
-    private String detailMap = null;
     private String heightMap = null;
-    private double[] detailScales = new double[8];
-    private String[] detailTextures = new String[8];
+    private String[] detailMaps = new String[3];
+    private double[] detailScales = new double[12];
+    private String[] detailTextures = new String[12];
     private int textureCount = 0;
     private String mapname = "";
     private Vector3f lightDirection = null;
@@ -160,18 +160,27 @@ public class TestEarthSculptorMap extends SimpleApplication {
         this.heightMap = name + ".png";
 
         if (textureCount <= 4) {
-            this.detailMap = name + "_d.png";
+            this.detailMaps[0] = name + "_d.png";
         } else {
-            // TODO 如果有多个AlphaMap呢？
+            int cnt = textureCount / 4;
+            for(int i=0; i<cnt; i++) {
+                this.detailMaps[i] = name + "_d" + i + ".png";
+            }
         }
     }
     
+    /**
+     * 生成地形
+     */
     private void initTerrain() {
+        /**
+         * 加载材质
+         */
         Material material = new Material(assetManager, "Common/MatDefs/Terrain/TerrainLighting.j3md");
         material.getAdditionalRenderState().setFaceCullMode(FaceCullMode.Off);
         material.setBoolean("useTriPlanarMapping", false);
 
-        Texture alphaMap = assetManager.loadTexture(detailMap);
+        Texture alphaMap = assetManager.loadTexture(detailMaps[0]);
         material.setTexture("AlphaMap", alphaMap);
 
         for (int i = 0; i < textureCount; i++) {
@@ -186,6 +195,9 @@ public class TestEarthSculptorMap extends SimpleApplication {
             material.setFloat(key2, scale);
         }
 
+        /**
+         * 加载高度图
+         */
         Texture heightTexture = assetManager.loadTexture(heightMap);
         ImageBasedHeightMap heightMap = new ImageBasedHeightMap(heightTexture.getImage(), 1f);
         heightMap.load();

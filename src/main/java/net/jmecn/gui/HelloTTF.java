@@ -40,7 +40,8 @@ public class HelloTTF extends SimpleApplication {
 				PLAIN, // 字形：0 普通、1 粗体、2 斜体
 				FONT_SIZE);// 字号
 
-		TrueTypeFont font = (TrueTypeFont) assetManager.loadAsset(ttk);
+		@SuppressWarnings("unchecked")
+        TrueTypeFont font = (TrueTypeFont) assetManager.loadAsset(ttk);
 
 		
 		// 在屏幕中央显示一首五言绝句。

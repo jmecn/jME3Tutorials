@@ -4,7 +4,6 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.scene.Spatial;
@@ -16,14 +15,20 @@ import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import com.jme3.water.WaterFilter;
 
+/**
+ * 通过高度图加载地形。
+ * 
+ * @author yanmaoyuan
+ *
+ */
 public class HelloTerrain extends SimpleApplication {
+
     @Override
     public void simpleInitApp() {
 
-        cam.setLocation(new Vector3f(-63.904045f, 298.0622f, 177.26915f));
-        cam.setRotation(new Quaternion(0.08737865f, 0.8777567f, -0.43718588f, 0.17543258f));
+        cam.setLocation(new Vector3f(-100, 80, 50));
 
-        flyCam.setMoveSpeed(100f);
+        flyCam.setMoveSpeed(20f);
 
         initLight();
 
@@ -34,6 +39,9 @@ public class HelloTerrain extends SimpleApplication {
         initTerrain();
     }
 
+    /**
+     * 初始化灯光
+     */
     private void initLight() {
         AmbientLight ambient = new AmbientLight();
         ambient.setColor(new ColorRGBA(0.298f, 0.2392f, 0.2745f, 1f));
@@ -49,12 +57,11 @@ public class HelloTerrain extends SimpleApplication {
      * 初始化天空
      */
     private void initSky() {
-        // 天空盒
         Spatial sky = SkyFactory.createSky(assetManager, "Textures/Sky/SkySphereMap.jpg",
                 SkyFactory.EnvMapType.SphereMap);
         rootNode.attachChild(sky);
     }
-    
+
     /**
      * 初始化水面
      */
@@ -64,12 +71,9 @@ public class HelloTerrain extends SimpleApplication {
 
         // 水
         WaterFilter waterFilter = new WaterFilter();
-        waterFilter.setWaterHeight(59.75f);
-        waterFilter.setWaveScale(10f);
-        waterFilter.setWaterTransparency(0.5f);
-        waterFilter.setSpeed(2f);
-        waterFilter.setWaterColor(new ColorRGBA(0.4314f, 0.9373f, 0.8431f, 1f));
-        waterFilter.setLightDirection(new Vector3f(0.097551f, -0.733139f, -0.673046f));
+        waterFilter.setWaterHeight(50f);// 水面高度
+        waterFilter.setWaterTransparency(0.2f);// 透明度
+        waterFilter.setWaterColor(new ColorRGBA(0.4314f, 0.9373f, 0.8431f, 1f));// 水面颜色
 
         fpp.addFilter(waterFilter);
     }
@@ -86,26 +90,20 @@ public class HelloTerrain extends SimpleApplication {
         ImageBasedHeightMap heightmap = new ImageBasedHeightMap(heightMapImage.getImage(), 1f);
         heightmap.load();
 
-        /**
-         * Optimal terrain patch size is 65 (64x64). The total size is up to
-         * you. At 1025 it ran fine for me (200+FPS), however at size=2049, it
-         * got really slow. But that is a jump from 2 million to 8 million
-         * triangles...
-         */
         /*
-         * 根据高度图生成实际的地形。图片的分辨率为257 (256*256)。
+         * 根据高度图生成实际的地形。该地形被分解成边长65(64*64)的矩形区块，用于优化网格。高度图的边长为 257，分辨率 256*256。
          */
         TerrainQuad terrain = new TerrainQuad("terrain", 65, 257, heightmap.getHeightMap());
 
+        // 层次细节
         TerrainLodControl control = new TerrainLodControl(terrain, getCamera());
-        // patch size, and a multiplier
-        control.setLodCalculator(new DistanceLodCalculator (65, 2f));
+        control.setLodCalculator(new DistanceLodCalculator(65, 2.7f));
         terrain.addControl(control);
 
+        // 地形材质
         terrain.setMaterial(assetManager.loadMaterial("Scenes/Maps/DefaultMap/default.j3m"));
 
-        terrain.setLocalTranslation(0, -90, 0);
-        terrain.setLocalScale(1, 1, 1);
+        terrain.setLocalTranslation(0, -100, 0);
         rootNode.attachChild(terrain);
     }
 
