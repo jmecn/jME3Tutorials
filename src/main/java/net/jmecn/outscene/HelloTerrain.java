@@ -90,6 +90,15 @@ public class HelloTerrain extends SimpleApplication {
         ImageBasedHeightMap heightmap = new ImageBasedHeightMap(heightMapImage.getImage(), 1f);
         heightmap.load();
 
+        // 高斯平滑
+        GaussianBlur gaussianBlur = new GaussianBlur();
+        
+        float[] heightData = heightmap.getHeightMap();
+        int width = heightMapImage.getImage().getWidth();
+        int height = heightMapImage.getImage().getHeight();
+        
+        heightData = gaussianBlur.filter(heightData, width, height);
+        
         /*
          * 根据高度图生成实际的地形。该地形被分解成边长65(64*64)的矩形区块，用于优化网格。高度图的边长为 257，分辨率 256*256。
          */

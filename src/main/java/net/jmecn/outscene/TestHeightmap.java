@@ -69,6 +69,10 @@ public class TestHeightmap extends SimpleApplication implements ActionListener {
             }
         }
 
+        // 高斯平滑
+        GaussianBlur gaussianBlur = new GaussianBlur();
+        heightData = gaussianBlur.filter(heightData, width, height);
+        
         // 加载材质
         material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         material.setBoolean("VertexColor", true);
