@@ -26,8 +26,6 @@ jME3官方网站：
 * QQ讨论群: 423979787
 * 作者邮箱: 115050813@qq.com
 
-[本教程设计大纲](http://www.jmecn.net/tutorial-for-beginners/about-this-tutorial)
-
 ## 前言
 [前言：我想做游戏](http://www.jmecn.net/tutorial-for-beginners/preface-i-want-to-make-game)
 
@@ -35,7 +33,7 @@ jME3官方网站：
 
 [第一章：jME3简介](http://www.jmecn.net/tutorial-for-beginners/chapter-1-introduce-jme3)
 
-![AndroidStudio与钢铁侠](/content/images/2017/03/android_studio2.png)
+<img alt="AndroidStudio与钢铁侠" src="http://www.jmecn.net/tutorial-for-beginners/content/images/2017/03/android_studio2.png" width="320" height="240"/>
 
 * 1.1 概述
 * 1.2 jME3 SDK
@@ -44,7 +42,7 @@ jME3官方网站：
 
 [第二章：JME3基本概念](http://www.jmecn.net/tutorial-for-beginners/chapter-2-basic-concepts)
 
-<img src="http://www.jmecn.net/tutorial-for-beginners/content/images/2017/03/FlyCam.png" width="320" height="240" alt="第一人称像机"/>
+<img alt="第一人称像机" src="http://www.jmecn.net/tutorial-for-beginners/content/images/2017/03/FlyCam.png" width="320" height="240"/>
 
 * 2.1 应用程序主类SimpleApplication
 * 2.2 生命周期
@@ -56,7 +54,7 @@ jME3官方网站：
 
 [第三章：模型](http://www.jmecn.net/tutorial-for-beginners/chapter-3-model)
 
-![寒冰射手艾希](/content/images/2017/03/Ashe_AA_4x.png)
+<img alt="寒冰射手艾希" src="http://www.jmecn.net/tutorial-for-beginners/content/images/2017/03/Ashe_AA_4x.png" width="320" height="240"/>
 
 * 3.1 理解3D模型
 * 3.2 模型的来源
@@ -65,7 +63,7 @@ jME3官方网站：
 
 [第四章：网格](http://www.jmecn.net/tutorial-for-beginners/chapter-4-mesh)
 
-![球体网格](/content/images/2017/03/sphere.png)
+<img alt="球体网格" src="http://www.jmecn.net/tutorial-for-beginners/content/images/2017/03/sphere.png" width="320" height="240"/>
 
 * 4.1 定义模型的形状
 * 4.2 实例：自定义网格
@@ -74,7 +72,7 @@ jME3官方网站：
 
 [第五章：材质，障眼法](http://www.jmecn.net/tutorial-for-beginners/chapter-5-material-the-light-magic)
 
-![卡通边缘](/content/images/2017/04/PostCartoonEdge.png)
+<img alt="卡通边缘" src="http://www.jmecn.net/tutorial-for-beginners/content/images/2017/04/PostCartoonEdge.png" width="320" height="240"/>
 
 * 5.1 五色令人目盲
 * 5.2 jME3的材质
@@ -84,7 +82,7 @@ jME3官方网站：
 
 [第六章：材质系统](http://www.jmecn.net/tutorial-for-beginners/chapter-6-material-system)
 
-![不同反光度的效果](/content/images/2017/04/Materials_shininess.png)
+<img alt="不同反光度的效果" src="http://www.jmecn.net/tutorial-for-beginners/content/images/2017/04/Materials_shininess.png" width="320" height="240"/>
 
 * 6.1 材质系统
 * 6.2 材质实例：j3m文件
@@ -93,7 +91,7 @@ jME3官方网站：
 
 [第七章：光与影](http://www.jmecn.net/tutorial-for-beginners/chapter-7-light-and-shadow)
 
-![点光源](/content/images/2017/04/PointLight.png)
+<img alt="点光源" src="http://www.jmecn.net/tutorial-for-beginners/content/images/2017/04/PointLight.png" width="320" height="240"/>
 
 * 7.1 感受光影
 * 7.2 光源
@@ -102,7 +100,7 @@ jME3官方网站：
 
 [第八章：场景图](http://www.jmecn.net/tutorial-for-beginners/chapter-8-scene-graph)
 
-![场景图](/content/images/2017/04/SceneGraph.png)
+<img alt="场景图" src="http://www.jmecn.net/tutorial-for-beginners/content/images/2017/04/SceneGraph.png" width="320" height="240"/>
 
 * 8.1 概念
 * 8.2 实例：HelloNode
@@ -111,7 +109,7 @@ jME3官方网站：
 
 [第九章：用户交互](http://www.jmecn.net/tutorial-for-beginners/chapter-9-user-interaction)
 
-![方向盘](/content/images/2017/05/wheel.png)
+<img alt="方向盘" src="http://www.jmecn.net/tutorial-for-beginners/content/images/2017/05/wheel.png" width="320" height="240"/>
 
 * 9.1 键盘、鼠标、手柄、触屏
 * 9.2 ActionListener
@@ -120,7 +118,7 @@ jME3官方网站：
 
 [第十章：图形用户界面](http://www.jmecn.net/tutorial-for-beginners/chapter-10-graphics-user-interface)
 
-![Picture](/content/images/2017/05/Picture.png)
+<img alt="Picture" src="http://www.jmecn.net/tutorial-for-beginners/content/images/2017/05/Picture.png" width="320" height="240"/>
 
 * 10.1 GuiNode
 * 10.2 屏幕坐标系
@@ -129,14 +127,14 @@ jME3官方网站：
 
 [第十一章：3D音效](http://www.jmecn.net/tutorial-for-beginners/chapter-11-3d-audio)
 
-![Lumer音乐播放器](/content/images/2017/05/LemurMusicPlayer.png)
+<img alt="Lumer音乐播放器" src="http://www.jmecn.net/tutorial-for-beginners/content/images/2017/05/LemurMusicPlayer.png" width="320" height="240"/>
 
 * 11.1 3D音效
 * 11.2 音效系统分析
 
 [第十二章：动画](http://www.jmecn.net/tutorial-for-beginners/chapter-12-animation)
 
-![HelloAnimation](/content/images/2017/05/HelloAnimation.png)
+<img alt="HelloAnimation" src="http://www.jmecn.net/tutorial-for-beginners/content/images/2017/05/HelloAnimation.png" width="320" height="240"/>
 
 * 12.1 概述
 * 12.2 骨骼蒙皮动画
@@ -147,7 +145,7 @@ jME3官方网站：
 
 [第十三章：控制游戏逻辑](http://www.jmecn.net/tutorial-for-beginners/chapter-13-controlling-game-logic)
 
-![AppState生命周期](/content/images/2017/06/AppState-Life-Cycle.png)
+<img alt="AppState生命周期" src="http://www.jmecn.net/tutorial-for-beginners/content/images/2017/06/AppState-Life-Cycle.png" width="320" height="240"/>
 
 * 13.1 导读：游戏主循环
 * 13.2 jME3的主循环
@@ -157,7 +155,7 @@ jME3官方网站：
 
 [第十四章：特效](http://www.jmecn.net/tutorial-for-beginners/chapter-14-special-effects)
 
-![火焰粒子特效](/content/images/2017/06/ParticleFire.png)
+<img alt="火焰粒子特效" src="http://www.jmecn.net/tutorial-for-beginners/content/images/2017/06/ParticleFire.png" width="320" height="240"/>
 
 * 14.1 特效概述
 * 14.2 后期滤镜
@@ -167,7 +165,7 @@ jME3官方网站：
 
 [第十五章：碰撞检测](http://www.jmecn.net/tutorial-for-beginners/chapter-15-collision-detection)
 
-![射线检测](/content/images/2017/06/ray-cast.png)
+<img alt="射线检测" src="http://www.jmecn.net/tutorial-for-beginners/content/images/2017/06/ray-cast.png" width="320" height="240"/>
 
 * 15.1 碰撞与相交
 * 15.2 Collidable
@@ -177,7 +175,7 @@ jME3官方网站：
 
 [第十六章：物理引擎](http://www.jmecn.net/tutorial-for-beginners/chapter-16-physics-engine)
 
-![物理引擎](/content/images/2017/06/Adjusted.png)
+<img alt="物理引擎" src="http://www.jmecn.net/tutorial-for-beginners/content/images/2017/06/Adjusted.png" width="320" height="240"/>
 
 * 16.1 牛顿的苹果
 * 16.2 物理引擎概述
@@ -186,7 +184,7 @@ jME3官方网站：
 
 [第十七章：户外场景](http://www.jmecn.net/tutorial-for-beginners/chapter-17-outdoor-scene)
 
-![户外场景](/content/images/2017/06/outscene.png)
+<img alt="户外场景" src="http://www.jmecn.net/tutorial-for-beginners/content/images/2017/06/outscene.png" width="320" height="240"/>
 
 * 17.1 天空
 * 17.2 水面
